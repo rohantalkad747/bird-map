@@ -3,6 +3,13 @@ const bcrypt = require('bcryptjs');
 const { con } = require('../database/db');
 const mysql = require('mysql');
 
+module.exports = {
+    authenticate,
+    create,
+    update,
+    delete: _delete,
+    getAll
+};
 const con = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -11,6 +18,22 @@ const con = mysql.createConnection({
 });
 // CRUD Operations
 
+async function authenticate(username, password) {
+    con.connect((err) => {
+        if (err) throw err;
+        const stat = `SELECT * FROM users WHERE username= ${username}`;
+        con.query(stat, (err, res) => {
+            if (err) throw err;
+            // Compare hashes
+            if (password && bcrypt.compareSync(password, res['hashed'])) {
+                const token = jwt.sign({sub: res['id']}, "shhh");
+                const { hashed, ...userWithoutHash } = res;
+                return {userWithoutHash, token};
+            }
+        });
+    })
+
+}
 async function create(userParams) {
     const params = await getUserParams(userParams);
     if (userExists(username)) {
@@ -38,7 +61,7 @@ async function update(userParams) {
     const params = await getUserParams(userParams);
     con.connect((err) => {
         if (err) throw err;
-        var pass;
+        let pass;
         if (defPass) {
             pass = bcrypt.hashSync(userParams.password, 10);
         }
@@ -49,7 +72,8 @@ async function update(userParams) {
             })
         }
         const vals = `UPDATE users 
-        SET first=${params[0]} last=${params[1]} post = ${params[2]} email = ${params[3]} username = ${params[4]} hashed = ${pass}`;
+        SET first=${params[0]} last=${params[1]} post = ${params[2]} email = ${params[3]} username = ${params[4]} hashed = ${pass}
+        WHERE id = ${userParams['id']}`;
         con.query(vals, (err, res) => {
             if (err) throw err;
             console.log("One user was added.");
@@ -74,7 +98,7 @@ async function userExists(username) {
 async function getAll() {
     con.connect((err) => {
         if (err) throw err;
-        con.query('SELECT * from USERS LIMIT 1000')
+        con.query('SELECT * from USERS LIMIT 1000');
     })
 }
 
@@ -89,10 +113,11 @@ async function getUserParams (userParams) {
     return [first, last, post, email, username, defPass];
 }
 
-async function _delte(usename) {
+async function _delete(userParams) {
+    const { username } = userParams;
     con.connect((err) => {
         if (err) throw err;
-        con.query(`DELETE FROM users WHERE username = ${usename}`, (err, res) => {
+        con.query(`DELETE FROM users WHERE username = ${username}`, (err, res) => {
             if (err) throw err;
         });
     });
