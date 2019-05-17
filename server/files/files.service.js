@@ -1,7 +1,9 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 
-// TODO
+
+module.exports = uploadType;
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -16,9 +18,12 @@ async function uploadFile(file, key) {
                 Key: key,
                 Body: data
         };
+        s3.upload(params, (s3err, data) => {
+            if (s3err) throw s3err;
+        })
     });
 }
 
-async function uploadMusic(file, filename, username, type) {
-    uploadFile(file, `${username}/${type}/${filename}`);
+async function uploadType(file, filename, username, type) {
+    return await uploadFile(file, `${username}/${type}/${filename}`);
 }
