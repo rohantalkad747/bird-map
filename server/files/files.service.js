@@ -1,6 +1,7 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 const path = require('path');
+const config = require('../config');
 
 
 module.exports = {
@@ -9,8 +10,8 @@ module.exports = {
 };
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    accessKeyId: config.accessKey,
+    secretAccessKey: config.secretKey
 });
 
 const s3 = new AWS.S3({

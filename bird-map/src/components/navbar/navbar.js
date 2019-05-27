@@ -1,110 +1,52 @@
 import  React from 'react';
 import * as Images from "../../assets/logos";
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Container,
-    Nav,
-    Button,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem } from 'reactstrap';
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCrow, faHome, faEye, faCloudUploadAlt, faHeart, faSignInAlt, faMapMarked, faTree} from '@fortawesome/free-solid-svg-icons'
-
-library.add(faCrow, faHome, faEye, faCloudUploadAlt, faHeart, faSignInAlt, faMapMarked, faTree);
-
-
-const iconStyle = {
-    padding: 0,
-    alignItems: 'center',
-};
-const navItemStyle = {
-    '&:hover': {
-        textDecoration: 'underline',
-    }
-};
+import './navbar.css';
 
 class Navigation extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.toggle = this.toggle.bind(this);
-        this.state = {
-            isOpen: false
-        };
-    }
-    toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
+    
     render() {
         return (
             <div>
-                <Navbar light expand="md" style={{backgroundColor: '#e3f2fd'}}>
-                <NavbarToggler onClick={this.toggle} />
-                <Collapse isOpen={this.state.isOpen} navbar>
-                <NavbarBrand > <img src={Images.Logo} style={{height: '30%', width: '30%', paddingRight: 0}} alt="logo"/> </NavbarBrand>
-                    <Nav navbar>
-                        <NavItem style={navItemStyle}>
-                            <NavLink href="#">
-                                <FontAwesomeIcon icon="home" style={iconStyle} />  &nbsp; Home
-                            </NavLink>
-                        </NavItem>
-                        <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
-                                <FontAwesomeIcon icon="map-marked" style={iconStyle}/>
-                                &nbsp; Maps
-                            </DropdownToggle>
-                            <DropdownMenu right>
-                                <DropdownItem>
-                                    <FontAwesomeIcon icon="crow" style={iconStyle} /> &nbsp;
-                                    Bird Watch
-                                </DropdownItem>
-                                <DropdownItem>
-                                    <FontAwesomeIcon icon="tree" style={iconStyle} /> &nbsp;
-                                    Nest Watch
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
-                        <NavItem>
-                            <NavLink href="#">
-                                <FontAwesomeIcon icon="eye" style={iconStyle} /> &nbsp; Data
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="#">
-                                <FontAwesomeIcon icon="cloud-upload-alt" style={iconStyle}/>
-                                &nbsp; Submit
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="#">
-                                <FontAwesomeIcon icon="heart" style={iconStyle}/>
-                                &nbsp;
-                                Donate
-                            </NavLink>
-                        </NavItem>
-                    </Nav>
-                </Collapse>
-                <NavItem style={{display: 'flex', justifyContent: 'right'}}>
-                    <Button>
-                        <FontAwesomeIcon icon="sign-in-alt" style={iconStyle}/>
-                        &nbsp;
-                        Login
-                    </Button>
-                </NavItem>
-            </Navbar>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <li className="nav-header" style={{listStyleType: 'none', marginBottom: 20}}>
+                        <a href="#"><img src={Images.Logo} className="logo" style={{width: '35%', height: '35%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}} /> </a>
+                    </li>
+                    <button className="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li className="nav-item active">
+                            <a className="nav-link" href="#"> Home <span className="sr-only">(current)</span></a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#"> About </a>
+                            </li>
+                            <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Maps
+                            </a>
+                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a className="dropdown-item" href="#">Birds</a>
+                                <a className="dropdown-item" href="#">Nests</a>
+                            </div>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">Submit</a>
+                            </li>
+                            <li className="nav-item">
+                            <button className="search-box" id='search-box' style={{backgroundColor: 'black', marginBottom: 20}}> <div style={{color: 'white'}}>Donate</div></button>
+                            </li>
+                            <li className="nav-item">
+                            <button className="search-box" id='search-box' style={{backgroundColor: 'black'}}> <div style={{color: 'white'}}>Login</div></button>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
         );
     }

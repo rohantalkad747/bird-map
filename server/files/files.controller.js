@@ -1,14 +1,12 @@
 const express = require('express');
 const fileService = require('./files.service');
 const bodyParser = require('body-parser');
-const upload = require('multer');
-express.use(bodyParser.urlencoded({extended: true}));
 const router = express();
 
 module.exports = router;
 
-router.post('/add-files/:type', upload.single('myFile'), (req, res, next) => {
-    fileService.uploadType(req.file, req.body.username, req.body.type)
+router.post('/add-files/:type', (req, res, next) => {
+    fileService.uploadType(req.body, req.query.username, req.query.type)
         .then(() => res.json({}))
         .catch((err) => next(err));
 });

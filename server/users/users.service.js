@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { con } = require('../database/db');
 const mysql = require('mysql');
-
 module.exports = {
     authenticate,
     create,
@@ -36,21 +34,22 @@ async function authenticate(username, password) {
 }
 async function create(userParams) {
     const params = await getUserParams(userParams);
-    if (userExists(username)) {
+    if (userExists(userParams.username)) {
         throw "Username already exists";
+    }
+    if (emailExists(userParams.email)) {
+        throw "Email already in use";
     }
     con.connect((err) => {
         if (err) throw err;
-        if (defPass) {
-            const pass = bcrypt.hashSync(defPass, 10);
-            const created = (new Date()).toDateString();
-            const vals = `INSERT INTO users (first, last, post, email, username, hashed, created)` +
-                ` VALUES (${params[0]}, ${params[1]}, ${params[2]}, ${params[3]}, ${params[4]}, ${params[5]}, ${created})`;
-            con.query(vals, (err, res) => {
-                if (err) throw err;
-                console.log("One user was added.");
-            });
-        }
+        const pass = bcrypt.hashSync(defPass, 10);
+        const created = (new Date()).toDateString();
+        const vals = `INSERT INTO users (first, last, post, email, username, hashed, created)` +
+            ` VALUES (${params[0]}, ${params[1]}, ${params[2]}, ${params[3]}, ${params[4]}, ${params[5]}, ${created})`;
+        con.query(vals, (err, res) => {
+            if (err) throw err;
+            console.log("One user was added.");
+        });
     });
 }
 
@@ -92,6 +91,16 @@ async function userExists(username) {
             if (err) throw err;
             return (res != 0);
         }));
+    });
+}
+
+async function emailExists(email) {
+    const stat = `SELECT COUNT(*) FROM users WHERE email = ${email}`;
+    con.connect(err => {
+        if (err) throw err;
+        con.query(stat, (err, res) => {
+            return (res != 0);
+        });
     });
 }
 
