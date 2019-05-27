@@ -47,10 +47,10 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm-12" >
-                        <div className="jumbotron" style={{backgroundColor: 'black'}}>
+                    <div className="col-sm-12">
+                        <div className="jumbotron" style={{backgroundColor: '#1a1a1a'}}>
                             <h4 style={{color: 'white', textAlign: 'center'}}>Our Sponsors.</h4>
-                            <div style={{marginLeft: 200}}>
+                            <div style={{marginLeft: '20%', marginRight: '20%'}}>
                                 <a href="http://www.natureconservancy.ca/en/"> <img className="partner logo" data-aos="fade-right" src={Images.canadaBird} alt={"Canada Bird Association"} /> </a>
                                 <a href="https://lassonde.yorku.ca/"><img className="partner logo" data-aos="fade-up" src={Images.lassonde} alt={"Canada Bird Association"} /></a>
                                 <a href="https://www.svca.on.ca/"><img className="partner logo" data-aos="fade-right" src={Images.Toronto} alt={"Canada Bird Association"} /></a>

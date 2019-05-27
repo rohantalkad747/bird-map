@@ -4,6 +4,7 @@ import Navigation  from './components/navbar/navbar';
 import Home from './components/home/home';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as Images from './assets/logos';
+import Footer from "./components/footer/footer";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
                       <Route exact path="/" component={Home}/>
                   </div>
               </Router>
+              <Footer />
           </div>
       </div>
   );

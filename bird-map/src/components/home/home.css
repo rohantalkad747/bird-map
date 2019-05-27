@@ -12,7 +12,7 @@ CardImg {
     padding-bottom: 100%;
     margin-bottom: -100%;
     float: left;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .partner {
