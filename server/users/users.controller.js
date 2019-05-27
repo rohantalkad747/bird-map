@@ -27,8 +27,8 @@ router.delete('/delete', (req, res, next) => {
         .catch(err => next(err));
 });
 
-router.get('/all', (req, res, next) => {
-    userService.getAll()
+router.get('/:id', (req, res, next) => {
+    userService.getUser
         .then(users => res.json(users))
         .catch(err => next(err));
 });

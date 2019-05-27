@@ -7,15 +7,20 @@ const con = mysql.createConnection({
     database: 'birdmap'
 });
 
-async function addActiveUser(userParam.id) {
+async function addActiveUser(userParams) {
     con.connect((err) => {
-        const token = generateToken();
         const date = (new Date()).toDateString();
-        const stat = `INSERT INTO active_users (userId, token, loggedOn) VALUES (${userParams.id}, ${token}, ${date})`;
+        const stat = `INSERT INTO active_users (userId, token, loggedOn) VALUES (${userParams.id}, ${userParams.token}, ${date})`;
     });
 }
 
-function generateToken(userId) {
-    const date = new Date();
-    return ((date.getSeconds() * date.getMilliseconds()) + userId);
+async function checkToken(userParams){
+    con.connect((err) => {
+        if (err) throw err;
+        const stat = `SELECT username FROM active_users WHERE token=${userParams.token}`;
+        con.query(stat, (err, res) => {
+            if (err) throw err;
+            return (res && res == userParams.username);
+        })
+    });
 }

@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql');
+
 module.exports = {
     authenticate,
     create,
     update,
     delete: _delete,
-    getAll
+    getAll,
+    getUserParams
 };
 const con = mysql.createConnection({
         host: 'localhost',
@@ -19,14 +21,13 @@ const con = mysql.createConnection({
 async function authenticate(username, password) {
     con.connect((err) => {
         if (err) throw err;
-        const stat = `SELECT * FROM users WHERE username= ${username}`;
+        const stat = `SELECT * FROM users WHERE username = ${username}`;
         con.query(stat, (err, res) => {
             if (err) throw err;
             // Compare hashes
             if (password && bcrypt.compareSync(password, res['hashed'])) {
                 const token = jwt.sign({sub: res['id']}, "shhh");
-                const { hashed, ...userWithoutHash } = res;
-                return {userWithoutHash, token};
+                return token;
             }
         });
     })
@@ -70,8 +71,7 @@ async function update(userParams) {
                 pass = res;
             })
         }
-        const vals = `UPDATE users 
-        SET first=${params[0]} last=${params[1]} post = ${params[2]} email = ${params[3]} username = ${params[4]} hashed = ${pass}
+        const vals = `UPDATE users SET first=${params[0]} last=${params[1]} post = ${params[2]} email = ${params[3]} username = ${params[4]} hashed = ${pass}
         WHERE id = ${userParams['id']}`;
         con.query(vals, (err, res) => {
             if (err) throw err;
@@ -108,6 +108,21 @@ async function getAll() {
     con.connect((err) => {
         if (err) throw err;
         con.query('SELECT * from USERS LIMIT 1000');
+    })
+}
+
+async function getUser(token) {
+    con.connect((err) => {
+        if (err) throw err;
+        jwt.verify(token, 'shhh', (err, dec) => {
+            if (err) throw err;
+            const username = token.payload.username;
+            const stat = `SELECT * FROM users WHERE username = ${username}`;
+            con.query(stat, (err, res) => {
+                    if (err) throw err;
+                    return res;
+                });
+            });
     })
 }
 
