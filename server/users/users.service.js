@@ -78,9 +78,6 @@ async function update(userParams) {
             console.log("One user was added.");
         });
     });
-
-
-
 }
 
 async function userExists(username) {

@@ -5,9 +5,9 @@ import 'jquery/dist/jquery';
 import 'bootstrap/dist/js/bootstrap';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import AOS  from 'aos/dist/aos';
+import AOS from 'aos'
 import 'aos/dist/aos.css';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import 'leaflet/dist/leaflet.css';
 import './index.css';
 
 AOS.init();

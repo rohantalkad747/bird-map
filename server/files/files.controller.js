@@ -5,14 +5,14 @@ const router = express();
 
 module.exports = router;
 
-router.post('/add-files/:type', (req, res, next) => {
-    fileService.uploadType(req.body, req.query.username, req.query.type)
+router.post('/add-files/:username/:type', (req, res, next) => {
+    fileService.uploadType(req.body, req.params.username, req.params.type)
         .then(() => res.json({}))
         .catch((err) => next(err));
 });
 
-router.get('/get-files/:type', (req, res, next) => {
-    fileService.getFiles(req.body.username, req.params.type)
+router.get('/get-files/:username/:type', (req, res, next) => {
+    fileService.getFiles(req.params.username, req.params.type)
         .then(file => file ? res.sendFile(file) : res.status(400).send("Files not found"))
         .catch(err => next(err));
 });

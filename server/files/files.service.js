@@ -1,8 +1,8 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 const path = require('path');
-const config = require('../config');
 
+const bucket = "birdmap-files";
 
 module.exports = {
     uploadType,
@@ -10,8 +10,8 @@ module.exports = {
 };
 
 AWS.config.update({
-    accessKeyId: config.accessKey,
-    secretAccessKey: config.secretKey
+    accessKeyId: process.env.ACCESS_KEY,
+    secretAccessKey: process.env.SECRET
 });
 
 const s3 = new AWS.S3({
@@ -30,7 +30,7 @@ async function uploadFile(file, key) {
         console.log('File Error', err);
     });
     const params = {
-        Bucket: 'Birdmap',
+        Bucket: bucket,
         Key: key,
         Body: fileStream
     };
@@ -52,7 +52,7 @@ async function uploadType(file, username, type) {
 
 async function getFiles(username, fileType) {
     const params = {
-        Bucket: 'Birdmap',
+        Bucket: bucket,
         Prefix: `${username}/${fileType}`
     };
     s3.listObjects(params, (err, data) => {

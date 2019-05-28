@@ -5,6 +5,7 @@ import Home from './components/home/home';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as Images from './assets/logos';
 import Footer from "./components/footer/footer";
+import BirdMap from "./components/maps/birdmap";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
               <Router>
                   <div>
                       <Route exact path="/" component={Home}/>
+                      <Route exact path="/birdmap" component={BirdMap}/>
                   </div>
               </Router>
               <Footer />
