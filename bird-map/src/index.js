@@ -9,8 +9,9 @@ import AOS from 'aos'
 import 'aos/dist/aos.css';
 import 'leaflet/dist/leaflet.css';
 import './index.css';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 AOS.init();
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Router> <App /> </Router>, document.getElementById('root'));
 
 serviceWorker.unregister();

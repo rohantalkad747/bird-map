@@ -17,7 +17,7 @@ async function addActiveUser(userParams) {
 async function checkToken(userParams){
     con.connect((err) => {
         if (err) throw err;
-        const stat = `SELECT username FROM active_users WHERE token=${userParams.token}`;
+        const stat = `SELECT username FROM active_users WHERE token = ${userParams.token}`;
         con.query(stat, (err, res) => {
             if (err) throw err;
             return (res && res == userParams.username);

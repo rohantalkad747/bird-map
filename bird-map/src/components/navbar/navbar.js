@@ -20,23 +20,23 @@ class Navigation extends React.Component {
 
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                         <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-                            <li className="nav-item active">
-                            <a className="nav-link" href="/"> Home <span className="sr-only">(current)</span></a>
+                            <li className="nav-item">
+                            <Link className="nav-link" to="/"> Home <span className="sr-only">(current)</span></Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"> About </a>
+                                <Link className="nav-link" to="about"> About </Link>
                             </li>
                             <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Maps
                             </a>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="/birdmap">Birds</a>
-                                <a className="dropdown-item" href="#">Nests</a>
+                                <Link className="dropdown-item" to="/birdmap">Birds</Link>
+                                <Link className="dropdown-item" to="#">Nests</Link>
                             </div>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Submit</a>
+                                <Link className="nav-link" to="/submit">Submit </Link>
                             </li>
                             <li className="nav-item">
                             <button className="search-box" id='search-box' style={{backgroundColor: 'black', marginBottom: 20}}> <div style={{color: 'white'}}>Donate</div></button>
