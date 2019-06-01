@@ -1,17 +1,23 @@
 import React from "react"
 import * as L from "leaflet/dist/leaflet"
+import axios from "axios";
+import * as config from "../../../config";
 
-const mapStyles = {
-  backgroundColor: "blue",
-}
 
 class BirdMap extends React.Component {
   constructor(props) {
-    super(props)
-    this.addTiles = this.addTiles.bind(this)
+    super(props);
+    this.addTiles = this.addTiles.bind(this);
+    this.getBirds = this.getBirds.bind(this);
   }
 
   componentDidMount() {
+      this.getBirds((err, res) => {
+          // show error alert
+          if (err) throw err;
+          this.birds = res;
+          this.setState({curBirds: null});
+      });
     this.map = L.map("mapid").setView([40, 73], 13)
     navigator.geolocation.getCurrentPosition(
       pos => {
@@ -24,6 +30,24 @@ class BirdMap extends React.Component {
       },
     )
   }
+
+  addBird(bird) {
+      let birds = this.state.curBirds;
+      birds.push(bird);
+      this.setState({curBirds: birds});
+  }
+
+  removeBird(bird) {
+      let birds = this.state.curBirds;
+      const newBird = birds.filter(b => b.birdName !== bird.name);
+      this.setState({curBirds: birds});
+  }
+
+  getBirds(callback) {
+      axios.get(`${config.serverName}/birds`)
+          .then(res => callback(null, res.data))
+          .catch(err => callback(err, null));
+    }
 
   addTiles() {
     L.tileLayer(
@@ -42,6 +66,7 @@ class BirdMap extends React.Component {
   render() {
     return (
       <div className="container">
+          <h4 class="lead"> BirdMap </h4>
         <div id="mapid" style={{ height: 500 }} />
       </div>
     )

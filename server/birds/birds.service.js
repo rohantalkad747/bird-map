@@ -20,12 +20,12 @@ async function addBirds(json) {
   });
 }
 
-async function getBird(name) {
+async function getBirds() {
   conn.connect((err) => {
-    conn.query(`SELECT * FROM birds WHERE bird_name = ${name} LIMIT 1`,
+    conn.query(`SELECT * FROM birds`,
       (err, res) => {
       if (err) throw err;
       return res;
-      })
+      });
   });
 }
