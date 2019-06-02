@@ -5,7 +5,7 @@ import Home from './components/home/home';
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as Images from './assets/logos';
 import Footer from "./components/footer/footer";
-import BirdMap from "./components/maps/birdmap";
+import BirdMap from "./components/maps/bird.container";
 
 
 class App extends React.Component {

@@ -18,7 +18,7 @@ const card = (img, title, txt) => {
 class Home extends React.Component {
     render() {
         return (
-            <div style={{backgroundColor: '#f7f7f9'}}>
+            <div className="home" style={{backgroundColor: '#f7f7f9'}}>
                 <div className="row"style={{paddingBottom: 50}}>
                     <div className="col-sm-4" >
                         <div className="jumbotron">
