@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const mysql = require("mysql")
+const config = require("../config.json")
 
 module.exports = {
   authenticate,
@@ -24,9 +25,8 @@ async function authenticate(username, password) {
     const stat = `SELECT * FROM users WHERE username = ${username}`
     con.query(stat, (err, res) => {
       if (err) throw err
-      // Compare hashes
       if (password && bcrypt.compareSync(password, res["hashed"])) {
-        const token = jwt.sign({ sub: res["id"] }, "shhh")
+        const token = jwt.sign({ sub: res["id"] }, config.secret)
         return token
       }
     })
@@ -56,7 +56,7 @@ async function create(userParams) {
   })
 }
 
-async function update(userParams) {
+async function update(userParams, token) {
   if (!userExists) {
     throw "User does not exist!"
   }

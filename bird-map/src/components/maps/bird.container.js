@@ -12,12 +12,11 @@ class BirdMap extends React.Component {
   }
 
   componentWillMount() {
-    // this.getBirds((err, res) => {
-    //     // show error alert
-    //     if (err) throw err;
-    //     this.birds = res;
-    //     this.setState({curBirds: null});
-    // });
+    this.getBirds((err, res) => {
+        if (err) throw err;
+        this.birds = res;
+        this.setState({curBirds: null});
+    });
     this.birds = [
       { birdId: 1, birdName: "Robin" },
       { birdId: 2, birdName: "Crow" },

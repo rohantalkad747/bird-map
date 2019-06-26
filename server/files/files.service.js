@@ -1,4 +1,3 @@
-const fs = require("fs")
 const AWS = require("aws-sdk")
 const path = require("path")
 
@@ -14,29 +13,18 @@ AWS.config.update({
   secretAccessKey: process.env.SECRET,
 })
 
-const s3 = new AWS.S3({
-  apiVersion: "2006-03-01",
-})
-
 /**
  * @description Uploads a file (given by the path) with the defined key.
- * @param file THe file path.
+ * @param file THe file stream.
  * @param key The key to store in the S3 databse.
  */
-async function uploadFile(file, key) {
-  let fileStream = fs.createReadStream(file)
-  fileStream.on("error", err => {
-    console.log("File Error", err)
-  })
+async function uploadFile(stream, key) {
   const params = {
     Bucket: bucket,
     Key: key,
-    Body: fileStream,
+    Body: stream,
   }
-  s3.upload(params, (s3err, data) => {
-    if (s3err) throw s3err
-    console.log(`${data} uploaded`)
-  })
+  return await AWS.upload(params)
 }
 /**
  * @description Uploads a file (given by the path) for the given user.
@@ -46,19 +34,22 @@ async function uploadFile(file, key) {
  * @param type The type of file. This can either be photo, video, or audio (strings).
  */
 async function uploadType(file, username, type) {
-  return await uploadFile(file, `${username}/${type}/${path.basename(file)}`)
+  return await uploadFile(
+    fileName,
+    `${username}/${type}/${path.basename(file)}`,
+  )
 }
 
+/**
+ * Returns all the files of the given file type for the given user.
+ * @param {String} username
+ * @param {Enumeration of ['audio', 'image']} fileType
+ */
 async function getFiles(username, fileType) {
   const params = {
     Bucket: bucket,
     Prefix: `${username}/${fileType}`,
   }
-  s3.listObjects(params, (err, data) => {
-    if (err) throw err
-    if (data.Contents.length == 1) {
-      return Error("No files!")
-    }
-    return data.Contents.slice(1)
-  })
+  const data = await AWS.listObjects(params)
+  return data.Contents.slice(1)
 }

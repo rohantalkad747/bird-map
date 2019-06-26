@@ -16,10 +16,13 @@ router.post("/add-coordinates", (req, res, next) => {
 router.get("/all-coordinates", (req, res, next) => {
   geoService
     .getAll(req.body.birdIds)
-    .then(birds =>
-      birds.length != 0
-        ? res.status(200).send(birds)
-        : res.status(204).send("No birds!"),
-    )
-    .catch(err => res.status(500).send("Failed to get birds"))
+    .then(birds => {
+      res.send(JSON.stringify(birds))
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send("Failed to get birds")
+    })
 })
+
+module.exports = router
