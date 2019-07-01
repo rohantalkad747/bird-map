@@ -26,7 +26,7 @@ class Home extends React.Component {
                             <p className="lead">BirdMap is truly a citizen science effort. It provides a platform for both birders and ornithologists to collate and analyze the migrational and nesting patterns of various bird species.
                             </p>
                             <div className="container">
-                            <button className="search-box" id='search-box' style={{backgroundColor: 'black', alignContents: 'center', marginTop: 20, marginLeft: 20, height: 60, width: 100}}><div style={{color: 'white'}}>Learn more</div></button>
+                            <button className="search-box" id='search-box' style={{backgroundColor: 'black', alignContents: 'center', marginTop: 20, marginLeft: 70, height: 60, width: 100}}><div style={{color: 'white'}}>Learn more</div></button>
                             </div>
                         </div>
                     </div>
@@ -40,9 +40,8 @@ class Home extends React.Component {
                         <div className="card-deck" data-aos="zoom-in" style={{marginLeft: 20, marginRight: 20}}>
                             {card(Images.Chicakdee, "Maps", "Maps with your favorite species are plotted in real time, so you know where to go next time you bird!" +
                                 " Nesting locations and other migrational data are also shown, giving researchers a powerful tool for ornithology. ")}
-                            {card(Images.Chicakdee, "Media", "This community platform is big on the sharing of our birding experiences. You can upload your photos, audio recordings, and videos of birds directly for your fellow birders! ")}
-                            {card(Images.Chicakdee, "Maps", "Maps with your favorite species are plotted in real time, so you know where to go next time you bird!" +
-                                "Nesting locations and other migrational data are also shown, giving researchers a powerful tool for ornithology. ")}
+                            {card(Images.Chicakdee, "Graphs", " Graphs provide a clearer representation of the community collated data.")}
+                            {card(Images.Chicakdee, "Media", "This community platform is big on the sharing of our birding experiences. You can upload your photos, audio recordings, and videos of birds directly for your fellow birders!")}
                         </div>
                     </div>
                 </div>

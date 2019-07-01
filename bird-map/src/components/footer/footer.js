@@ -4,12 +4,12 @@ import React from "react"
 
 class Footer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.date = new Date().getFullYear()
   }
   render() {
     return (
-      <div className="container" style={{ backgroundColor: "#f7f7f9" }}>
+      <div className="container" style={{ backgroundColor: "#f7f7f9", paddingTop: '5%', paddingBottom: '5%'}}>
         <footer data-aos="zoom-out-up">
           <div className="row">
             <div className="col-md-4 col-xl-5">

@@ -1,27 +1,27 @@
-import React from "react"
-import axios from "axios"
-import Map from "./map"
-import * as config from "../../config"
-import Search from "../search/search"
+import React from "react";
+import axios from "axios";
+import Map from "./map";
+import * as config from "../../config";
+import Search from "../search/search";
 
 class BirdMap extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { curBirds: [] }
-    this.changeBirds = this.changeBirds.bind(this)
+    super(props);
+    this.state = { curBirds: [] };
+    this.changeBirds = this.changeBirds.bind(this);
   }
 
   componentWillMount() {
     this.getBirds((err, res) => {
-        if (err) throw err;
-        this.birds = res;
-        this.setState({curBirds: null});
+      if (err) throw err;
+      this.birds = res;
+      this.setState({ curBirds: null });
     });
     this.birds = [
       { birdId: 1, birdName: "Robin" },
       { birdId: 2, birdName: "Crow" },
-      { birdId: 3, birdName: "Sparrow" },
-    ]
+      { birdId: 3, birdName: "Sparrow" }
+    ];
   }
 
   /**
@@ -29,8 +29,8 @@ class BirdMap extends React.Component {
    * @param selectedBirds The array of selected birds.
    */
   changeBirds(selectedBirds) {
-    this.setState({ curBirds: selectedBirds })
-    console.log(selectedBirds)
+    this.setState({ curBirds: selectedBirds });
+    console.log(selectedBirds);
   }
 
   /**
@@ -38,9 +38,9 @@ class BirdMap extends React.Component {
    */
   getBirds(callback) {
     axios
-      .get(`${config.serverName}/birds`)
+      .get(`${config.serverName}/api/birds`)
       .then(res => callback(null, res.data))
-      .catch(err => callback(err, null))
+      .catch(err => callback(err, null));
   }
 
   render() {
@@ -51,7 +51,7 @@ class BirdMap extends React.Component {
           marginTop: 25,
           marginLeft: 30,
           marginRight: 30,
-          marginBottom: 50,
+          marginBottom: 50
         }}
       >
         <h4 className="lead" style={{ marginLeft: "35%" }}>
@@ -66,8 +66,8 @@ class BirdMap extends React.Component {
         </div>
         <Map birds={this.state.curBirds} />
       </div>
-    )
+    );
   }
 }
 
-export default BirdMap
+export default BirdMap;

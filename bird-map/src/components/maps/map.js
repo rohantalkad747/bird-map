@@ -11,49 +11,49 @@ const card = type => {
             <p className="card-text">Spotted on August 5th 2018.</p>
         </div>
     </div>`
-}
+};
 
 class Map extends React.Component {
   constructor(props) {
-    super(props)
-    this.birds = props.birds
-    this.addTiles = this.addTiles.bind(this)
+    super(props);
+    this.birds = props.birds;
+    this.addTiles = this.addTiles.bind(this);
     this.getTileLayer = this.getTileLayer.bind(this)
   }
 
   componentDidMount() {
-    this.map = L.map("mapid").setView([51.5, -0.09], 13)
+    this.map = L.map("mapid").setView([51.5, -0.09], 13);
     navigator.geolocation.getCurrentPosition(pos => {
       this.map.panTo([pos.coords.latitude, pos.coords.longitude])
-    })
+    });
     this.addTiles()
   }
 
   addTiles() {
-    const satellite = this.getTileLayer("mapbox.satellite")
-    const run = this.getTileLayer("mapbox.run-bike-hike")
-    const outdoors = this.getTileLayer("mapbox.outdoors")
+    const satellite = this.getTileLayer("mapbox.satellite");
+    const run = this.getTileLayer("mapbox.run-bike-hike");
+    const outdoors = this.getTileLayer("mapbox.outdoors");
     const baseLayers = {
       Satellite: satellite,
       Hiker: run,
       Street: outdoors,
-    }
+    };
     // Testing stuff
     let ico = L.icon({
       iconUrl: "http://www.clker.com/cliparts/u/V/6/f/G/9/red-raven-hi.png",
       iconSize: [24, 28],
-    })
-    let marker = L.marker([51.5, -0.09], { icon: ico })
-    marker.bindPopup(card("Raven"))
+    });
+    let marker = L.marker([51.5, -0.09], { icon: ico });
+    marker.bindPopup(card("Raven"));
 
-    let markerTwo = L.marker([51.5, -2], { icon: ico })
-    markerTwo.bindPopup(card("Hawk"))
+    let markerTwo = L.marker([51.5, -2], { icon: ico });
+    markerTwo.bindPopup(card("Hawk"));
 
-    const birdLayer = L.layerGroup([marker, markerTwo])
+    const birdLayer = L.layerGroup([marker, markerTwo]);
     // testing Over
-    const overlayMaps = { Birds: birdLayer, Nests: L.layerGroup([]) }
-    run.addTo(this.map)
-    birdLayer.addTo(this.map)
+    const overlayMaps = { Birds: birdLayer, Nests: L.layerGroup([]) };
+    run.addTo(this.map);
+    birdLayer.addTo(this.map);
     L.control.layers(baseLayers, overlayMaps).addTo(this.map)
   }
 

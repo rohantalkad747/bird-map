@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navigation  from './components/navbar/navbar';
+import AccountContainer from './components/account/account.container';
 import Home from './components/home/home';
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as Images from './assets/logos';
@@ -17,6 +18,7 @@ class App extends React.Component {
                     <Switch>
                         <Route path="/" exact component={Home}/>
                         <Route path="/birdmap" component={BirdMap}/>
+                        <Route path="/account" component={AccountContainer}/>
                     </Switch>
                 <Footer />
             </div>
