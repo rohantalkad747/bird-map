@@ -15,7 +15,6 @@ class BirdMap extends React.Component {
     this.getBirds((err, res) => {
       if (err) throw err;
       this.birds = res;
-      this.setState({ curBirds: null });
     });
     this.birds = [
       { birdId: 1, birdName: "Robin" },

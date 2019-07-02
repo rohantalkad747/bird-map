@@ -6,23 +6,25 @@ import "./navbar.css";
 class Navigation extends React.Component {
   render() {
     return (
-      <div >
+      <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <li
             className="nav-header"
             style={{ listStyleType: "none", marginBottom: 20 }}
           >
             <a href="#">
-              <img
-                src={Images.Logo}
-                className="logo"
-                style={{
-                  width: "35%",
-                  height: "35%",
-                  boxShadow:
-                    "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
-                }}
-              />{" "}
+              <Link to="/">
+                <img
+                  src={Images.Logo}
+                  className="logo"
+                  style={{
+                    width: "35%",
+                    height: "35%",
+                    boxShadow:
+                      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+                  }}
+                />
+              </Link>
             </a>
           </li>
           <button
@@ -73,31 +75,21 @@ class Navigation extends React.Component {
                 </div>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/graphs">
-                  Graphs
+                <Link className="nav-link" to="about">
+                  Donate
                 </Link>
               </li>
               <li className="nav-item">
                 <button
                   className="search-box"
                   id="search-box"
-                  style={{ backgroundColor: "black", marginBottom: 20 }}
+                  style={{ backgroundColor: "black" }}
                 >
-                  {" "}
-                  <div style={{ color: "white" }}>Donate</div>
-                </button>
-              </li>
-              <li className="nav-item">
-                  <button
-                    className="search-box"
-                    id="search-box"
-                    style={{ backgroundColor: "black" }}
-                  >
-                    <Link className="nav-link" to="/account">
+                  <Link className="nav-link" to="/account">
                     {" "}
                     <div style={{ color: "white" }}>Account</div>
-                    </Link>
-                  </button>
+                  </Link>
+                </button>
               </li>
             </ul>
           </div>

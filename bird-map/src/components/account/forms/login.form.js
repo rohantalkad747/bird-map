@@ -1,23 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
 class LoginForm extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: ''
-    }
-    this.triggerLogin = this.triggerLogin.bind(this);
+      email: "",
+      password: ""
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  triggerLogin(event) {
-    event.preventDefault();
-    this.setState({value: event.target.value});
-    // const email = e.target.values.username;
-    // const pass = e.target.values.password;
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit() {
+    axios.post();
   }
 
   render() {
@@ -36,31 +36,35 @@ class LoginForm extends React.Component {
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
                     <span className="input-group-text">
-                      <i className="fas fa-user"></i>
+                      <i className="fas fa-user" />
                     </span>
                   </div>
                   <input
                     type="email"
-                    value={this.state.email}
+                    name="email"
+                    onChange={this.handleChange}
                     className="form-control"
                     placeholder="e-mail"
-                  ></input>
+                  />
                 </div>
                 <div className="input-group form-group">
                   <div className="input-group-prepend">
                     <span className="input-group-text">
-                      <i className="fas fa-key"></i>
+                      <i className="fas fa-key" />
                     </span>
                   </div>
                   <input
                     type="password"
-                    value={this.state.password}
+                    name="password"
+                    onChange={this.handleChange}
                     className="form-control"
+                    minLength="5"
                     placeholder="password"
-                  ></input>
+                  />
                 </div>
                 <button
-                  onClick={ this.triggerLogin }
+                  type="submit"
+                  onClick={this.handleSubmit}
                   className="search-box"
                   id="search-box"
                   style={{
@@ -69,8 +73,8 @@ class LoginForm extends React.Component {
                     marginLeft: 90
                   }}
                 >
-                    {" "}
-                    <div style={{ color: "white" }}>Sign in</div>
+                  {" "}
+                  <div style={{ color: "white" }}>Sign in</div>
                 </button>
               </form>
             </div>
