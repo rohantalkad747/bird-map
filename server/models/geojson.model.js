@@ -1,6 +1,7 @@
 /**
  * Data access object for bird coordinates.
  */
+
 class GeoJSONModel {
     constructor(geoJSONParams) {
         const {lat, lng, birdId, numb, dateTaken} = geoJSONParams;
@@ -11,7 +12,6 @@ class GeoJSONModel {
         this.dateTaken = dateTaken;
         this.descr = geoJSONParams.descr;
     }
-    save();
     static get Builder() {
         class Builder {
             withLat(lat) {

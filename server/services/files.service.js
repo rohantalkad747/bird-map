@@ -1,52 +1,71 @@
 const AWS = require("aws-sdk");
-const path = require("path");
+const fs = require("fs");
+require("dotenv")();
 
-const bucket = "birdmap-files";
-
-module.exports = {
-  uploadType,
-  getFiles,
-};
+/* AWS S3 bucket name */
+const BUCKET_NAME = "birdmap-files";
 
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET,
+  secretAccessKey: process.env.SECRET
 });
 
+/* Keyword for file types when receiving files from the front-end */
+const IMAGE_TYPE = "image";
+const AUDIO_TYPE = "audio";
+
 /**
- * @description Uploads a file (given by the path) with the defined key.
- * @param file THe file stream.
- * @param key The key to store in the S3 databse.
+ * Uploads a file to the S3 bucket with a unique key based on the user id.
+ * @param userId The user's id.
+ * @param file The file object.
+ * @param fileType Enumeration of [IMAGE_TYPE, AUDIO_TYPE]
  */
-async function uploadFile(stream, key) {
+async function uploadToBucket(userId, file, fileType) {
+  if (fileType !== AUDIO_TYPE || fileType !== IMAGE_TYPE) {
+    throw Error("File type is invalid!");
+  }
   const params = {
-    Bucket: bucket,
-    Key: key,
-    Body: stream,
+    Bucket: BUCKET_NAME,
+    Key: `${userId}/${fileType}/${file.nam}`,
+    Body: file.file
   };
-  return await AWS.upload(params)
-}
-/**
- * @description Uploads a file (given by the path) for the given user.
- * In AWS S3, the key will be: {username}/{"photo", "video", or "audio"}/{filename}.
- * @param file The file path.
- * @param username The username of the user.
- * @param type The type of file. This can either be photo, video, or audio (strings).
- */
-async function uploadType(file, username, type) {
-  return await uploadFile(file, `${username}/${type}/${path.basename(file)}`)
+  await AWS.upload(params).promise();
+  fs.unlinkSync(file.path);
 }
 
 /**
  * Returns all the files of the given file type for the given user.
- * @param {String} username
- * @param {Enumeration of ['audio', 'image']} fileType
+ * @param req The request object.
+ * @param userId The user's id.
+ * @param fileType Enumeration of ['audio', 'image']
  */
-async function getFiles(username, fileType) {
+async function getFilesFromUser(req, userId, fileType) {
   const params = {
-    Bucket: bucket,
-    Prefix: `${username}/${fileType}`,
+    Bucket: BUCKET_NAME,
+    Prefix: `${userId}/${fileType}`
   };
-  const data = await AWS.listObjects(params);
-  return data.Contents.slice(1)
+  const data = await AWS.listObjects(params).promise();
+  return data.Contents.slice(1);
 }
+
+/**
+ * Returns all the files of the given file type for the given user.
+ * @param req The request object.
+ * @param userId The user's id.
+ * @param fileType Enumeration of ['audio', 'image']
+ */
+async function getAllAudioClips(req, userId, fileType) {
+  const params = {
+    Bucket: BUCKET_NAME,
+    Prefix: `${userId}/${fileType}`
+  };
+  const data = await AWS.listObjects(params).promise();
+  return data.Contents.slice(1);
+}
+
+module.exports = {
+  uploadType,
+  getFilesFromUser,
+  getAllAudioClips,
+  getAllImages
+};

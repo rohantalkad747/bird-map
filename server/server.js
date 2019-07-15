@@ -3,9 +3,11 @@ require("rootpath")();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -14,8 +16,8 @@ app.use(bodyParser.json());
 // app.use("/files", require("./controllers/files.controller"));
 // app.use("/geospatials", require("./controllers/geospatials.controller"));
 
-const GeoJSONModel = require('./models/geojson.model');
-(new GeoJSONModel.Builder()).withLat(-500).build();
+const GeoJSONModel = require("./models/geojson.model");
+new GeoJSONModel.Builder().withLat(-500).build();
 
 const port =
   process.env.NODE_ENV === "production" ? process.env.port || 80 : 2500;
