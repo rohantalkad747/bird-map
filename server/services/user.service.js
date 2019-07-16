@@ -3,11 +3,11 @@
  * @author Rohan
  * ==========================================================
  */
-
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const UserModel = require("../models/user.model");
-const { conn } = require("./db.service");
+const { getConn, convertJSON } = require("./db.service");
 
 /**
  * Authenticates a user based on their email and password. Returns a token if
@@ -18,12 +18,13 @@ const { conn } = require("./db.service");
  * @return {Promise<void>}
  */
 async function authenticate(email, password, cb) {
-  const user = getUser(email);
-  if (!user) throw Error("No user with that e-mail exists!");
-  if (await bcrypt.compareSync(password, user.hash)) {
-    const token = jwt.sign({ sub: user }, process.env.JWT_SECRET);
+  const user = await this.getUser(email);
+  if (!user) throw Error("No   with that e-mail exists!");
+  console.log(user);
+  if (await bcrypt.compareSync(password, user.hashedpw)) {
     const { hash, ...userWithoutHashed } = user;
-    userWithoutHashed.token = token;
+    const token = jwt.sign({ sub: userWithoutHashed }, process.env.JWT_SECRET);
+    return token;
   } else throw Error("Invalid credentials!");
 }
 
@@ -34,15 +35,19 @@ async function authenticate(email, password, cb) {
  */
 async function create(email, password) {
   if (!email || !password) throw Error("One or more fields are undefined!");
-  if (this.getUser(email)) {
+  const isUser = await this.getUser(email);
+  if (isUser) {
     throw Error("Account with this e-mail already exists!");
   }
-  const user = await new UserModel.Builder()
-    .withEmail(email)
-    .withPassword(password)
-    .build();
-  const stat = `INSERT INTO users (email, hash) VALUES (${user.email}, ${user.password})`;
-  await conn.execute(stat);
+  const user = new UserModel();
+  user.setEmail(email);
+  // Password to hash
+  await user.setPassword(password);
+  console.log(user);
+  const conn = await getConn();
+  const stat = `INSERT INTO users (email, hashedpw) VALUES ('${user.email}', '${user.password}')`;
+  console.log(await conn.execute(stat));
+  await conn.end();
 }
 
 /**
@@ -50,23 +55,17 @@ async function create(email, password) {
  * @param email The user's email.
  */
 async function getUser(email) {
-  const stat = `SELECT * FROM users WHERE email = ${email}`;
+  const stat = `SELECT * FROM users WHERE email = '${email}' LIMIT 1`;
+  const conn = await getConn();
+  console.log(stat);
   const user = await conn.execute(stat);
-  return user;
-}
-
-/**
- * Deletes a user based on their userId.
- * @param userId The user's id.
- */
-async function _delete(userId) {
-  const stat = `DELETE FROM users WHERE id = ${userId}`;
-  await conn.execute(stat);
+  await conn.end();
+  // MySQL returns a weird object ... so just get the first result.
+  return convertJSON(user[0][0]);
 }
 
 module.exports = {
   authenticate,
   create,
-  getUser,
-  delete: _delete
+  getUser
 };

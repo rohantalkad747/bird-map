@@ -25,7 +25,7 @@ const upload = multer({ storage: storage });
 /* Middleware for determining whether user is logged in. */
 const isAuthed = (req, res, next) => {
   if (req.cookies.user) next();
-  else next(new Error("User is not authorized!"));
+  else res.sendStatus(401);
 };
 
 router.post(
@@ -37,15 +37,15 @@ router.post(
       return;
     }
     fileService
-      .uploadToBucket(req.cookies.user, req.file, req.params.type)
+      .uploadToBucket(req.cookies.user.id, req.file, req.params.type)
       .then(() => res.json({}))
       .catch(err => next(err));
   }
 );
 
-router.get("/get-files/:type/userId", (req, res, next) => {
+router.get("/get-files/", (req, res, next) => {
   fileService
-    .getFiles(req.cookies.user, req.params.type)
+    .getBucketFiles(res, req.body.fileType, req.body.userId)
     .then(file =>
       file ? res.sendFile(file) : res.status(400).send("Files not found")
     )

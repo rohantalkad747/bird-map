@@ -1,6 +1,12 @@
+/** =========================================================
+ * Service functions for uploading and download files from S3.
+ * @author Rohan
+ * ==========================================================
+ */
+
+require("dotenv").config();
 const AWS = require("aws-sdk");
 const fs = require("fs");
-require("dotenv")();
 
 /* AWS S3 bucket name */
 const BUCKET_NAME = "birdmap-files";
@@ -9,6 +15,8 @@ AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY,
   secretAccessKey: process.env.SECRET
 });
+
+const S3_CONTROL = AWS.S3;
 
 /* Keyword for file types when receiving files from the front-end */
 const IMAGE_TYPE = "image";
@@ -26,46 +34,38 @@ async function uploadToBucket(userId, file, fileType) {
   }
   const params = {
     Bucket: BUCKET_NAME,
-    Key: `${userId}/${fileType}/${file.nam}`,
-    Body: file.file
+    Key: `${fileType}/${userId}/${file.filename}`,
+    Body: fs.createReadStream(file.file)
   };
-  await AWS.upload(params).promise();
+  await S3_CONTROL.upload(params).promise();
   fs.unlinkSync(file.path);
 }
 
 /**
- * Returns all the files of the given file type for the given user.
- * @param req The request object.
- * @param userId The user's id.
+ * Returns all the files of the given file type.
+ * @param res The response object.
  * @param fileType Enumeration of ['audio', 'image']
+ *  @param key Optional: The user's id.
  */
-async function getFilesFromUser(req, userId, fileType) {
+async function getBucketFiles(res, fileType, key) {
   const params = {
     Bucket: BUCKET_NAME,
-    Prefix: `${userId}/${fileType}`
+    Prefix: fileType + key ? `/${key}` : ""
   };
-  const data = await AWS.listObjects(params).promise();
-  return data.Contents.slice(1);
+  const data = await S3_CONTROL.listObjects(params).promise();
+  res.pipe(data.createReadStream());
 }
 
-/**
- * Returns all the files of the given file type for the given user.
- * @param req The request object.
- * @param userId The user's id.
- * @param fileType Enumeration of ['audio', 'image']
- */
-async function getAllAudioClips(req, userId, fileType) {
+async function deleteBucketFile(fileType, userId, fileName) {
   const params = {
     Bucket: BUCKET_NAME,
-    Prefix: `${userId}/${fileType}`
+    key: `${fileType}/${userId}/${fileName}`
   };
-  const data = await AWS.listObjects(params).promise();
-  return data.Contents.slice(1);
+  await S3_CONTROL.deleteObject(params);
 }
 
 module.exports = {
-  uploadType,
-  getFilesFromUser,
-  getAllAudioClips,
-  getAllImages
+  uploadToBucket,
+  getBucketFiles,
+  deleteBucketFile
 };
