@@ -37,7 +37,7 @@ class GeoJSONModel {
       withDateTaken(dateTaken) {
         if (dateTaken.getTime() > new Date().getTime())
           throw Error("Date must be in the past!");
-        this.dateTaken = dateTaken;
+        this.dateTaken = this.formatDate(dateTaken);
         return this;
       }
       withDescr(descr) {

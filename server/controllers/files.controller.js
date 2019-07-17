@@ -24,7 +24,7 @@ const upload = multer({ storage: storage });
 
 /* Middleware for determining whether user is logged in. */
 const isAuthed = (req, res, next) => {
-  if (req.cookies.user) next();
+  if (req.session && req.session.user) next();
   else res.sendStatus(401);
 };
 

@@ -7,7 +7,8 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const UserModel = require("../models/user.model");
-const { getConn, convertJSON } = require("./db.service");
+const { getConn } = require("./db.service");
+const { convertJSON } = require("../util/util");
 
 /**
  * Authenticates a user based on their email and password. Returns a token if
@@ -18,12 +19,10 @@ const { getConn, convertJSON } = require("./db.service");
  * @return {Promise<void>}
  */
 async function authenticate(email, password, cb) {
-  const user = await this.getUser(email);
+  const user = convertJSON(await this.getUser(email));
   if (!user) throw Error("No   with that e-mail exists!");
-  console.log(user);
   if (await bcrypt.compareSync(password, user.hashedpw)) {
-    const { hash, ...userWithoutHashed } = user;
-    const token = jwt.sign({ sub: userWithoutHashed }, process.env.JWT_SECRET);
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET);
     return token;
   } else throw Error("Invalid credentials!");
 }

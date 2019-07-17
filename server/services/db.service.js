@@ -10,7 +10,4 @@ const getConn = async () => {
   });
 };
 
-/* Helper to parse MySQL raw data */
-const convertJSON = obj => JSON.parse(JSON.stringify(obj));
-
-module.exports = { getConn, convertJSON };
+module.exports = { getConn };

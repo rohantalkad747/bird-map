@@ -7,12 +7,14 @@ module.exports = router;
 router.post("/authenticate", (req, res, next) => {
   userService
     .authenticate(req.body.email, req.body.password)
-    .then(token => {
-      token
-        ? res.cookie("token", token).redirect("/home")
-        : res.status(400).send("Username/password is incorrect.");
+    .then(user => {
+      if (user) {
+        res.locals.user = user;
+        req.session.user = user;
+        res.redirect("/home");
+      }
     })
-    .catch(err => next(err));
+    .catch(err => res.status(401).send(err.message));
 });
 
 router.post("/register", (req, res, next) => {
@@ -21,6 +23,13 @@ router.post("/register", (req, res, next) => {
     .create(req.body.email, req.body.password)
     .then(() => res.json({}))
     .catch(err => next(err));
+});
+
+router.post("/logout", (req, res, next) => {
+  if (req.session && req.session.user) {
+    req.session.reset();
+    res.redirect("/");
+  }
 });
 
 router.use((err, req, res, next) => {
