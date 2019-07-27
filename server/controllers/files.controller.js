@@ -29,7 +29,7 @@ const isAuthed = (req, res, next) => {
 };
 
 router.post(
-  "/add-files",
+  "/add-file",
   [isAuthed, upload.single("file")],
   (req, res, next) => {
     if (!req.file) {
@@ -37,7 +37,7 @@ router.post(
       return;
     }
     fileService
-      .uploadToBucket(req.cookies.user.id, req.file, req.params.type)
+      .uploadToBucket(req.cookies.user.id, req.file, req.query.type)
       .then(() => res.json({}))
       .catch(err => next(err));
   }

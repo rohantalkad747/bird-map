@@ -42,6 +42,7 @@ class GeoJSONModel {
       }
       withDescr(descr) {
         this.descr = descr;
+        return this;
       }
       build() {
         return new GeoJSONModel(this);

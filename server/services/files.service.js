@@ -16,7 +16,7 @@ AWS.config.update({
   secretAccessKey: process.env.SECRET
 });
 
-const S3_CONTROL = AWS.S3;
+const S3_CONTROL = new AWS.S3();
 
 /* Keyword for file types when receiving files from the front-end */
 const IMAGE_TYPE = "image";
@@ -29,15 +29,15 @@ const AUDIO_TYPE = "audio";
  * @param fileType Enumeration of [IMAGE_TYPE, AUDIO_TYPE]
  */
 async function uploadToBucket(userId, file, fileType) {
-  if (fileType !== AUDIO_TYPE || fileType !== IMAGE_TYPE) {
+  if (fileType !== AUDIO_TYPE && fileType !== IMAGE_TYPE) {
     throw Error("File type is invalid!");
   }
   const params = {
     Bucket: BUCKET_NAME,
     Key: `${fileType}/${userId}/${file.filename}`,
-    Body: fs.createReadStream(file.file)
+    Body: fs.createReadStream(file.path.replace("\\", "/"))
   };
-  await S3_CONTROL.upload(params).promise();
+  console.log(await S3_CONTROL.upload(params).promise());
   fs.unlinkSync(file.path);
 }
 
@@ -45,21 +45,30 @@ async function uploadToBucket(userId, file, fileType) {
  * Returns all the files of the given file type.
  * @param res The response object.
  * @param fileType Enumeration of ['audio', 'image']
- *  @param key Optional: The user's id.
+ * @param key The user's id
  */
 async function getBucketFiles(res, fileType, key) {
   const params = {
     Bucket: BUCKET_NAME,
-    Prefix: fileType + key ? `/${key}` : ""
+    Prefix: `${fileType}/${key}`
   };
-  const data = await S3_CONTROL.listObjects(params).promise();
-  res.pipe(data.createReadStream());
+  const data = await S3_CONTROL.listObjectsV2(params).promise();
+  let fileInfoParams = {
+    Bucket: BUCKET_NAME,
+  };
+  for (const fileInfo of data.Contents) {
+    fileInfoParams.Key = fileInfo.Key;
+    const file = await S3_CONTROL.getObject(fileInfoParams).promise();
+    fs.createReadStream(file.Body)
+    .pipe(res);
+  }
+  
 }
 
 async function deleteBucketFile(fileType, userId, fileName) {
   const params = {
     Bucket: BUCKET_NAME,
-    key: `${fileType}/${userId}/${fileName}`
+    Key: `${fileType}/${userId}/${fileName}`
   };
   await S3_CONTROL.deleteObject(params);
 }

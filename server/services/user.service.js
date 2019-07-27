@@ -40,7 +40,6 @@ async function create(email, password) {
   }
   const user = new UserModel();
   user.setEmail(email);
-  // Password to hash
   await user.setPassword(password);
   console.log(user);
   const conn = await getConn();
