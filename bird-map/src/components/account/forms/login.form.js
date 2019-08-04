@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import config from "../../../config";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -17,7 +18,9 @@ class LoginForm extends React.Component {
   }
 
   handleSubmit() {
-    axios.post();
+    axios.post(`${config.serverName}/api/users/authenticate`, {
+      
+    });
   }
 
   render() {

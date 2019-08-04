@@ -56,10 +56,11 @@ async function getUser(email) {
   const stat = `SELECT * FROM users WHERE email = '${email}' LIMIT 1`;
   const conn = await getConn();
   console.log(stat);
-  const user = await conn.execute(stat);
+  const userQuery = await conn.execute(stat);
   await conn.end();
   // MySQL returns a weird object ... so just get the first result.
-  return convertJSON(user[0][0]);
+  const userObj = userQuery[0][0];
+  return userObj ? convertJSON(user[0][0]) : userObj;
 }
 
 module.exports = {

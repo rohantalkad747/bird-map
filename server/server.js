@@ -22,9 +22,9 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use("/users", require("./controllers/users.controller"));
-app.use("/files", require("./controllers/files.controller"));
-app.use("/birds", require("./controllers/geospatials.controller"));
+app.use("/api/users", require("./controllers/users.controller"));
+app.use("/api/files", require("./controllers/files.controller"));
+app.use("/api/birds", require("./controllers/geospatials.controller"));
 
 const port =
   process.env.NODE_ENV === "production" ? process.env.port || 80 : 2500;

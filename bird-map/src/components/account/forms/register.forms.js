@@ -46,7 +46,7 @@ class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      email: "",
       password: ""
     };
     this.handleChange = this.handleChange.bind(this);
@@ -56,9 +56,12 @@ class RegisterForm extends React.Component {
   handleSubmit() {
     this.setState({ loading: true });
     axios
-      .post(`${config.serverName}/api/user/register`, this.state)
-      .then(() => {this.setState({ loading: false });
-      this.props.flipForms()});
+      .post(`${config.serverName}/api/users/register`, this.state)
+      .then((res) => {
+        this.setState({ loading: false });
+        this.props.flipForms();
+        console.log(res);
+    });
   }
 
   handleChange(event) {
@@ -92,6 +95,7 @@ class RegisterForm extends React.Component {
                   <input
                     type="email"
                     name="email"
+                    onChange={this.handleChange}
                     className="form-control"
                     placeholder="email"
                   />

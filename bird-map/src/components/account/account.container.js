@@ -14,7 +14,6 @@ class AccountContainer extends React.Component {
     }
 
     flipForms(e) {
-        e.preventDefault();
         this.setState(prevState => { return {isLogin: !(prevState.isLogin)}});
     }
     render() {

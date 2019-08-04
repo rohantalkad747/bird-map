@@ -14,6 +14,7 @@ class BirdMap extends React.Component {
   componentWillMount() {
     this.getBirds((err, res) => {
       if (err) throw err;
+      console.log(res);
       this.birds = res;
     });
     this.birds = [
@@ -37,7 +38,7 @@ class BirdMap extends React.Component {
    */
   getBirds(callback) {
     axios
-      .get(`${config.serverName}/api/birds`)
+      .get(`${config.serverName}/api/birds/all-birds`)
       .then(res => callback(null, res.data))
       .catch(err => callback(err, null));
   }

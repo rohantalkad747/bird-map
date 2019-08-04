@@ -47,8 +47,14 @@ router.get("/get-files/", (req, res, next) => {
   fileService
     .getBucketFiles(res, req.body.fileType, req.body.userId)
     .then(file =>
-      file ? res.sendFile(file) : res.status(400).send("Files not found")
-    )
+      file ? res.sendFile(file) : res.status(400).send("Files not found"))
+    .catch(err => next(err));
+});
+
+router.get("/delete-file/", (req, res, next) => {
+  fileService
+    .getBucketFiles(req.body.fileType, req.body.userId, req.body.fileName)
+    .then(() => res.sendStatus(200))
     .catch(err => next(err));
 });
 

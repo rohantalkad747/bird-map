@@ -18,7 +18,7 @@ router.post("/authenticate", (req, res, next) => {
 });
 
 router.post("/register", (req, res, next) => {
-  console.log("ada");
+  console.log(req.body);
   userService
     .create(req.body.email, req.body.password)
     .then(() => res.json({}))

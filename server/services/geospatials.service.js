@@ -38,7 +38,7 @@ async function createBirdCoordinate(geoJSON) {
 /**
  * Returns all the geospatial entries for the given birdIds.
  * @param birdIds An array of birdIds.
- * [@param] dateRange This optional parameter returns only entries between the given dates.
+ * @param? dateRange This optional parameter returns only entries between the given dates.
  */
 async function getAllBirdCoordinates(birdIds, dateRange) {
   if (birdIds.length === 0) return [];
@@ -55,7 +55,7 @@ async function getAllBirdCoordinates(birdIds, dateRange) {
 }
 
 /**
- * Returns all birds.
+ * Returns all bird geospatial objects.
  */
 async function getAllBirds() {
   const conn = await getConn();

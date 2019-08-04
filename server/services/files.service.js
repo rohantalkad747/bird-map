@@ -29,15 +29,16 @@ const AUDIO_TYPE = "audio";
  * @param fileType Enumeration of [IMAGE_TYPE, AUDIO_TYPE]
  */
 async function uploadToBucket(userId, file, fileType) {
-  if (fileType !== AUDIO_TYPE && fileType !== IMAGE_TYPE) {
+  if (![AUDIO_TYPE, IMAGE_TYPE].includes(fileType)) {
     throw Error("File type is invalid!");
   }
   const params = {
     Bucket: BUCKET_NAME,
     Key: `${fileType}/${userId}/${file.filename}`,
+    // I'm running windows so the replacement will be removed when on production
     Body: fs.createReadStream(file.path.replace("\\", "/"))
   };
-  console.log(await S3_CONTROL.upload(params).promise());
+  await S3_CONTROL.upload(params).promise();
   fs.unlinkSync(file.path);
 }
 
@@ -53,7 +54,7 @@ async function getBucketFiles(res, fileType, key) {
     Prefix: `${fileType}/${key}`
   };
   const data = await S3_CONTROL.listObjectsV2(params).promise();
-  let fileInfoParams = {
+  const fileInfoParams = {
     Bucket: BUCKET_NAME,
   };
   for (const fileInfo of data.Contents) {
@@ -62,9 +63,14 @@ async function getBucketFiles(res, fileType, key) {
     fs.createReadStream(file.Body)
     .pipe(res);
   }
-  
 }
 
+/**
+ * Deletes a file from the bucket.
+ * @param fileType An enumeration of ["audio", "image"]
+ * @param userId The user id of the owner of the file
+ * @param file The file name.
+ */
 async function deleteBucketFile(fileType, userId, fileName) {
   const params = {
     Bucket: BUCKET_NAME,

@@ -85,7 +85,7 @@ class Navigation extends React.Component {
                   id="search-box"
                   style={{ backgroundColor: "black" }}
                 >
-                  <Link className="nav-link" to="/account">
+                  <Link to="/account" >
                     {" "}
                     <div style={{ color: "white" }}>Account</div>
                   </Link>
