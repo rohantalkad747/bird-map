@@ -41,6 +41,7 @@ async function createBirdCoordinate(geoJSON) {
  * @param? dateRange This optional parameter returns only entries between the given dates.
  */
 async function getAllBirdCoordinates(birdIds, dateRange) {
+  console.log(birdIds);
   if (birdIds.length === 0) return [];
   let dateRangeStat;
   if (dateRange && dateRange.from && dateRange.to) {

@@ -1,60 +1,102 @@
-import React from "react"
-import * as L from "leaflet/dist/leaflet"
+import React from "react";
+import * as L from "leaflet/dist/leaflet";
+import axios from "axios";
+import * as config from "../../config";
 
-const card = type => {
+const card = bird => {
   return `<div className="card">
         <div className="card-header">
             Bird Spotted on Ground
         </div>
         <div className="card-body">
-            <h5 className="card-title">${type}</h5>
-            <p className="card-text">Spotted on August 5th 2018.</p>
+            <h5 className="card-title">${bird.descr}</h5>
+            <p className="card-text">Spotted on ${new Date(bird.date_taken)}</p>
         </div>
-    </div>`
+    </div>`;
 };
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    this.birds = props.birds;
-    this.addTiles = this.addTiles.bind(this);
-    this.getTileLayer = this.getTileLayer.bind(this)
+    this.state = { birdIdentifiers: props.birds.map(b => b.id) };
+    this.setBaseLayers = this.setBaseLayers.bind(this);
+    this.ico = L.icon({
+      iconUrl: "http://www.clker.com/cliparts/u/V/6/f/G/9/red-raven-hi.png",
+      iconSize: [24, 28]
+    });
+  }
+
+  setBirds() {
+    console.log("setting after update");
+    if (this.state.birdIdentifiers != "") {
+      this.addBirdCoordinates();
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.state.birdIdentifiers !== nextProps.birdIdentifiers;
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ birdIdentifiers: props.birds.map(b => b.id) }, () => {
+      this.setBirds();
+    });
   }
 
   componentDidMount() {
-    this.map = L.map("mapid").setView([51.5, -0.09], 13);
-    navigator.geolocation.getCurrentPosition(pos => {
-      this.map.panTo([pos.coords.latitude, pos.coords.longitude])
-    });
-    this.addTiles()
+    this.addMap();
+    this.setBaseLayers();
   }
 
-  addTiles() {
+  addBirdCoordinates() {
+    axios
+      .post(config.serverName + "/api/birds/all-coordinates", {
+        birdIds: this.state.birdIdentifiers
+      })
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          birdIdentifiers: this.state.birdIdentifiers,
+          birdCoordinates: res.data
+        });
+        this.addBirdsToMap();
+      })
+      .catch(err => console.log(err));
+  }
+
+  addMap() {
+    this.map = L.map("mapid").setView([51.5, -0.09], 13);
+    navigator.geolocation.getCurrentPosition(pos => {
+      this.map.panTo([pos.coords.latitude, pos.coords.longitude]);
+    });
+  }
+
+  addBirdsToMap() {
+    console.log("adding");
+    const markers = [];
+    for (const bird of this.state.birdCoordinates) {
+      console.log(bird);
+      const marker = L.marker([bird.lat, bird.lng], { icon: this.ico });
+      marker.bindPopup(card(bird));
+      markers.push(marker);
+    }
+    const birdLayer = L.layerGroup(markers);
+    // Now ideally we would get the nest layer ....
+    const overlayMaps = { Birds: birdLayer, Nests: L.layerGroup([]) };
+    birdLayer.addTo(this.map);
+    L.control.layers(this.baseLayers, overlayMaps).addTo(this.map);
+  }
+
+  setBaseLayers() {
     const satellite = this.getTileLayer("mapbox.satellite");
     const run = this.getTileLayer("mapbox.run-bike-hike");
     const outdoors = this.getTileLayer("mapbox.outdoors");
-    const baseLayers = {
+    this.baseLayers = {
       Satellite: satellite,
       Hiker: run,
-      Street: outdoors,
+      Street: outdoors
     };
-    // Testing stuff
-    let ico = L.icon({
-      iconUrl: "http://www.clker.com/cliparts/u/V/6/f/G/9/red-raven-hi.png",
-      iconSize: [24, 28],
-    });
-    let marker = L.marker([51.5, -0.09], { icon: ico });
-    marker.bindPopup(card("Raven"));
-
-    let markerTwo = L.marker([51.5, -2], { icon: ico });
-    markerTwo.bindPopup(card("Hawk"));
-
-    const birdLayer = L.layerGroup([marker, markerTwo]);
-    // testing Over
-    const overlayMaps = { Birds: birdLayer, Nests: L.layerGroup([]) };
-    run.addTo(this.map);
-    birdLayer.addTo(this.map);
-    L.control.layers(baseLayers, overlayMaps).addTo(this.map)
+    run.addTo(this.map); // Default base layer
   }
 
   getTileLayer(type) {
@@ -65,9 +107,9 @@ class Map extends React.Component {
         maxZoom: 18,
         id: type,
         accessToken:
-          "pk.eyJ1IjoicnRhbGthZCIsImEiOiJjanc3YTU5amkyYzRpNDlxa3B3dmQwZW51In0.nLoVD83IzK60UcH8NkveXA",
-      },
-    )
+          "pk.eyJ1IjoicnRhbGthZCIsImEiOiJjanc3YTU5amkyYzRpNDlxa3B3dmQwZW51In0.nLoVD83IzK60UcH8NkveXA"
+      }
+    );
   }
 
   render() {
@@ -78,12 +120,12 @@ class Map extends React.Component {
           style={{
             height: 500,
             boxShadow:
-              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
           }}
         />
       </div>
-    )
+    );
   }
 }
 
-export default Map
+export default Map;

@@ -9,7 +9,7 @@ router.post("/add-coordinate", (req, res, next) => {
     .catch(err => res.status(500).send("Failed to add coordinates"));
 });
 
-router.get("/all-coordinates", (req, res, next) => {
+router.post("/all-coordinates", (req, res, next) => {
   geoService
     .getAllBirdCoordinates(req.body.birdIds)
     .then(birds => {

@@ -7,30 +7,26 @@ import Search from "../search/search";
 class BirdMap extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { curBirds: [] };
+    this.state = { selectedBirds: [],
+                   birds: []
+    };
     this.changeBirds = this.changeBirds.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getBirds((err, res) => {
       if (err) throw err;
-      console.log(res);
-      this.birds = res;
+      this.setState({selectedBirds: [], birds: res});
     });
-    this.birds = [
-      { birdId: 1, birdName: "Robin" },
-      { birdId: 2, birdName: "Crow" },
-      { birdId: 3, birdName: "Sparrow" }
-    ];
   }
 
   /**
-   * @description Handle bird change event from the searchbar.
+   * Handle bird change event from the searchbar.
    * @param selectedBirds The array of selected birds.
    */
   changeBirds(selectedBirds) {
-    this.setState({ curBirds: selectedBirds });
     console.log(selectedBirds);
+    this.setState({ selectedBirds: selectedBirds, birds: this.state.birds });
   }
 
   /**
@@ -62,9 +58,9 @@ class BirdMap extends React.Component {
           className="container"
           style={{ width: "50%", marginTop: 25, marginBottom: 25 }}
         >
-          <Search options={this.birds} handleChange={this.changeBirds} />
+          <Search options={this.state.birds} handleChange={this.changeBirds} />
         </div>
-        <Map birds={this.state.curBirds} />
+        <Map birds={this.state.selectedBirds} />
       </div>
     );
   }
