@@ -1,13 +1,15 @@
 import React from "react";
 import axios from "axios";
 import config from "../../../config";
+import AlertComponent from "../../shared/alerts.js";
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      alert: new AlertComponent()
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,10 +19,27 @@ class LoginForm extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleSubmit() {
-    axios.post(`${config.serverName}/api/users/authenticate`, {
-      
-    });
+  handleSubmit(e) {
+    e.preventDefault();
+    axios
+      .post(`${config.serverName}/api/users/authenticate`, {
+        email: this.state.email,
+        password: this.state.password
+      })
+      .then(() => {
+        const prevAlert = this.state.alert;
+        prevAlert.setSuccess("Success", "You have logged in!");
+        this.setState({
+          alert: prevAlert
+        });
+      })
+      .catch(err => {
+        const prevAlert = this.state.alert;
+        prevAlert.setFailure("Invalid Credentials", err.message);
+        this.setState({
+          alert: prevAlert
+        });
+      });
   }
 
   render() {
@@ -29,6 +48,9 @@ class LoginForm extends React.Component {
         className="login container"
         style={{ paddingTop: 50, paddingBottom: 50 }}
       >
+        <div style={{ paddingBottom: 50}}>
+          {this.state.alert.component}
+        </div>
         <div className="d-flex justify-content-center h-100">
           <div className="card">
             <div className="card-header d-flex justify-content-center">

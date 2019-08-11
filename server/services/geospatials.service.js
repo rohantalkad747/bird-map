@@ -45,10 +45,18 @@ async function getAllBirdCoordinates(birdIds, dateRange) {
   if (birdIds.length === 0) return [];
   let dateRangeStat;
   if (dateRange && dateRange.from && dateRange.to) {
-    dateRangeStat = ` WHERE date_taken >= ${formatDate(dateRange.from)} AND date_taken <= ${formatDate(dateRange.to)}`;
+    dateRangeStat = ` AND date_taken >= ${formatDate(
+      dateRange.from
+    )} AND date_taken <= ${formatDate(dateRange.to)}`;
   }
   const birds = "(" + birdIds.join(", ") + ")";
-  const stat = `SELECT * FROM geospatials WHERE bird_id IN ${birds}` + (dateRangeStat || "");
+  const stat =
+    `
+   SELECT lat, lng, date_taken, descr, birds.bird_name 
+   FROM geospatials
+   FULL JOIN birds
+   ON bird_id = birds.id
+   WHERE bird_id IN ${birds}` + (dateRangeStat || "");
   const conn = await getConn();
   const rawBirds = await conn.execute(stat);
   await conn.end();

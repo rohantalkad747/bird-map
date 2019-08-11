@@ -20,8 +20,10 @@ const { convertJSON } = require("../util/util");
  */
 async function authenticate(email, password, cb) {
   const user = convertJSON(await this.getUser(email));
+  console.log(user)
   if (!user) throw Error("No   with that e-mail exists!");
-  if (await bcrypt.compareSync(password, user.hashedpw)) {
+  const passwordCorrect = bcrypt.compareSync(password, user.hashedpw);
+  if (passwordCorrect) {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET);
     return token;
   } else throw Error("Invalid credentials!");
@@ -55,12 +57,11 @@ async function create(email, password) {
 async function getUser(email) {
   const stat = `SELECT * FROM users WHERE email = '${email}' LIMIT 1`;
   const conn = await getConn();
-  console.log(stat);
   const userQuery = await conn.execute(stat);
   await conn.end();
   // MySQL returns a weird object ... so just get the first result.
   const userObj = userQuery[0][0];
-  return userObj ? convertJSON(user[0][0]) : userObj;
+  return userObj ? convertJSON(userObj) : userObj;
 }
 
 module.exports = {

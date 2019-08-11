@@ -6,11 +6,13 @@ import * as config from "../../config";
 const card = bird => {
   return `<div className="card">
         <div className="card-header">
-            Bird Spotted on Ground
+            <b> Bird: </b> ${bird.bird_name}
         </div>
         <div className="card-body">
             <h5 className="card-title">${bird.descr}</h5>
-            <p className="card-text">Spotted on ${new Date(bird.date_taken)}</p>
+            <p className="card-text">Spotted on ${new Date(
+              bird.date_taken
+            ).toDateString()}</p>
         </div>
     </div>`;
 };
@@ -28,9 +30,7 @@ class Map extends React.Component {
 
   setBirds() {
     console.log("setting after update");
-    if (this.state.birdIdentifiers != "") {
-      this.addBirdCoordinates();
-    }
+    this.addBirdCoordinates();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -72,7 +72,6 @@ class Map extends React.Component {
   }
 
   addBirdsToMap() {
-    console.log("adding");
     const markers = [];
     for (const bird of this.state.birdCoordinates) {
       console.log(bird);
@@ -80,11 +79,10 @@ class Map extends React.Component {
       marker.bindPopup(card(bird));
       markers.push(marker);
     }
-    const birdLayer = L.layerGroup(markers);
-    // Now ideally we would get the nest layer ....
-    const overlayMaps = { Birds: birdLayer, Nests: L.layerGroup([]) };
-    birdLayer.addTo(this.map);
-    L.control.layers(this.baseLayers, overlayMaps).addTo(this.map);
+    if (this.birdLayer) this.birdLayer.remove();
+    this.birdLayer = L.layerGroup(markers);
+    // this.nestLayer = L.layerGroup(nestLayers);
+    this.birdLayer.addTo(this.map);
   }
 
   setBaseLayers() {
@@ -97,6 +95,7 @@ class Map extends React.Component {
       Street: outdoors
     };
     run.addTo(this.map); // Default base layer
+    L.control.layers(this.baseLayers).addTo(this.map);
   }
 
   getTileLayer(type) {

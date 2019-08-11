@@ -2,52 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import config from "../../../config";
 import axios from "axios";
-
-const loadingSnippet = (
-  <div className="d-flex align-items-center">
-    <strong>Loading...</strong>
-    <div
-      className="spinner-border ml-auto"
-      role="status"
-      aria-hidden="true"
-    ></div>
-  </div>
-);
-
-const success = (
-  <div className="alert alert-success alert-dismissible fade show" role="alert">
-    The next step is to verify your email ...
-    <button
-      type="button"
-      className="close"
-      data-dismiss="alert"
-      aria-label="Close"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-);
-
-const failure = (
-  <div className="alert alert-danger alert-dismissible fade show" role="alert">
-    Oops ... something went wrong.
-    <button
-      type="button"
-      className="close"
-      data-dismiss="alert"
-      aria-label="Close"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-);
+import loadingSnippet from "../../shared/loading.snippet"
+import AlertComponent from "../../shared/alerts.js";
 
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      alert: new AlertComponent()
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,9 +22,10 @@ class RegisterForm extends React.Component {
     axios
       .post(`${config.serverName}/api/users/register`, this.state)
       .then((res) => {
-        this.setState({ loading: false });
-        this.props.flipForms();
-        console.log(res);
+        const prevAlert = this.state.alert;
+        prevAlert.setSuccess("Success", "You've been registered! You can now login ...")
+        this.setState({ loading: false, alert: prevAlert });
+        setTimeout(() => this.props.flipForms(), 2000);
     });
   }
 
@@ -70,15 +35,12 @@ class RegisterForm extends React.Component {
 
   render() {
     const loading = this.state.loading ? loadingSnippet : null;
-    let alert;
-    if (this.state.success) alert = success;
-    else if (this.state.success === false) alert = failure;
     return (
       <div
         className="login container"
         style={{ paddingTop: 50, paddingBottom: 50 }}
       >
-        {alert}
+        {this.state.alert.component}
         <div className="d-flex justify-content-center h-100">
           <div className="card">
             <div className="card-header d-flex justify-content-center">

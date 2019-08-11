@@ -11,7 +11,7 @@ router.post("/authenticate", (req, res, next) => {
       if (user) {
         res.locals.user = user;
         req.session.user = user;
-        res.redirect("/home");
+        res.sendStatus(200);
       }
     })
     .catch(err => res.status(401).send(err.message));

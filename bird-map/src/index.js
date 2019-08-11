@@ -10,6 +10,7 @@ import 'aos/dist/aos.css';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './assets/css/all.css';
+import 'antd/dist/antd.css';
 
 AOS.init();
 ReactDOM.render(<Router> <App /> </Router>, document.getElementById('root'));
