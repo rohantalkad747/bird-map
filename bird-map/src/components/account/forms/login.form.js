@@ -4,8 +4,8 @@ import config from "../../../config";
 import AlertComponent from "../../shared/alerts.js";
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       email: "",
       password: "",
@@ -35,7 +35,7 @@ class LoginForm extends React.Component {
       })
       .catch(err => {
         const prevAlert = this.state.alert;
-        prevAlert.setFailure("Invalid Credentials", err.message);
+        prevAlert.setFailure("Invalid Credentials", err.response.data);
         this.setState({
           alert: prevAlert
         });

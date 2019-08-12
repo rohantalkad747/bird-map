@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import config from "../../../config";
 import axios from "axios";
-import loadingSnippet from "../../shared/loading.snippet"
+import loadingSnippet from "../../shared/loading.snippet";
 import AlertComponent from "../../shared/alerts.js";
 
 class RegisterForm extends React.Component {
@@ -17,16 +17,28 @@ class RegisterForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     this.setState({ loading: true });
     axios
       .post(`${config.serverName}/api/users/register`, this.state)
-      .then((res) => {
+      .then(res => {
         const prevAlert = this.state.alert;
-        prevAlert.setSuccess("Success", "You've been registered! You can now login ...")
+        prevAlert.setSuccess(
+          "Success",
+          "You've been registered! You can now login ..."
+        );
         this.setState({ loading: false, alert: prevAlert });
         setTimeout(() => this.props.flipForms(), 2000);
-    });
+      })
+        .catch((err) => {
+          const prevAlert = this.state.alert;
+          prevAlert.setFailure(
+              "Failure",
+              err.response.data
+          );
+          this.setState({ loading: false, alert: prevAlert });
+        });
   }
 
   handleChange(event) {
@@ -40,7 +52,7 @@ class RegisterForm extends React.Component {
         className="login container"
         style={{ paddingTop: 50, paddingBottom: 50 }}
       >
-        {this.state.alert.component}
+        <div style={{ paddingBottom: 50 }}>{this.state.alert.component}</div>
         <div className="d-flex justify-content-center h-100">
           <div className="card">
             <div className="card-header d-flex justify-content-center">
