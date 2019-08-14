@@ -1,10 +1,11 @@
 import React from "react";
 import axios from "axios";
-import Map from "./map";
+import BirdMap from "./bird.map";
 import * as config from "../../config";
 import Search from "../search/search";
+import {getBirds} from "../../services/birds.service";
 
-class BirdMap extends React.Component {
+class BirdContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { selectedBirds: [],
@@ -14,7 +15,7 @@ class BirdMap extends React.Component {
   }
 
   componentDidMount() {
-    this.getBirds((err, res) => {
+    getBirds((err, res) => {
       if (err) throw err;
       this.setState({selectedBirds: [], birds: res});
     });
@@ -25,18 +26,7 @@ class BirdMap extends React.Component {
    * @param selectedBirds The array of selected birds.
    */
   changeBirds(selectedBirds) {
-    console.log(selectedBirds);
     this.setState({ selectedBirds: selectedBirds, birds: this.state.birds });
-  }
-
-  /**
-   * Returns an array of birds from the database.
-   */
-  getBirds(callback) {
-    axios
-      .get(`${config.serverName}/api/birds/all-birds`)
-      .then(res => callback(null, res.data))
-      .catch(err => callback(err, null));
   }
 
   render() {
@@ -60,10 +50,10 @@ class BirdMap extends React.Component {
         >
           <Search options={this.state.birds} handleChange={this.changeBirds} />
         </div>
-        <Map birds={this.state.selectedBirds} />
+        <BirdMap birds={this.state.selectedBirds} />
       </div>
     );
   }
 }
 
-export default BirdMap;
+export default BirdContainer;

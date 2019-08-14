@@ -11301,7 +11301,7 @@ map:
     - '4.4'
     - 5.0.0
     - 5.1.0
-  label: Map
+  label: BirdMap
   search:
     terms:
       - address
@@ -11327,7 +11327,7 @@ map:
 map-marked:
   changes:
     - 5.1.0
-  label: Map Marked
+  label: BirdMap Marked
   search:
     terms:
       - address
@@ -11352,7 +11352,7 @@ map-marked:
 map-marked-alt:
   changes:
     - 5.1.0
-  label: Alternate Map Marked
+  label: Alternate BirdMap Marked
   search:
     terms:
       - address
@@ -11403,7 +11403,7 @@ map-marker:
 map-marker-alt:
   changes:
     - 5.0.0
-  label: Alternate Map Marker
+  label: Alternate BirdMap Marker
   search:
     terms:
       - address
@@ -11430,7 +11430,7 @@ map-pin:
     - '4.4'
     - 5.0.0
     - 5.2.0
-  label: Map Pin
+  label: BirdMap Pin
   search:
     terms:
       - address
@@ -11456,7 +11456,7 @@ map-signs:
     - '4.4'
     - 5.0.0
     - 5.2.0
-  label: Map Signs
+  label: BirdMap Signs
   search:
     terms:
       - directions

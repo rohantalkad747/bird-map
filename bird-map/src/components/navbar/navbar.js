@@ -69,7 +69,7 @@ class Navigation extends React.Component {
                   <Link className="dropdown-item" to="/birdmap">
                     View
                   </Link>
-                  <Link className="dropdown-item" to="#">
+                  <Link className="dropdown-item" to="/contribute">
                     Contribute
                   </Link>
                 </div>

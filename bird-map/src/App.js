@@ -6,8 +6,8 @@ import Home from './components/home/home';
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import * as Images from './assets/logos';
 import Footer from "./components/footer/footer";
-import BirdMap from "./components/maps/bird.container";
-
+import BirdContainer from "./components/maps/bird.container";
+import ContributeComponent from "./components/contribute/contribute";
 
 class App extends React.Component {
   render() {
@@ -17,8 +17,9 @@ class App extends React.Component {
                 <Navigation />
                     <Switch>
                         <Route path="/" exact component={Home}/>
-                        <Route path="/birdmap" component={BirdMap}/>
+                        <Route path="/birdmap" component={BirdContainer}/>
                         <Route path="/account" component={AccountContainer}/>
+                        <Route path="/contribute" component={ContributeComponent}/>
                     </Switch>
                 <Footer />
             </div>
