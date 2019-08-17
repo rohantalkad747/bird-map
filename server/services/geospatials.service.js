@@ -22,13 +22,14 @@ async function createBirdCoordinate(geoJSON) {
   const geospatial = new GeoJSONModel.Builder()
     .withLat(geoJSON.lat)
     .withLng(geoJSON.lng)
+    .withDescr(geoJSON.descr)
     .withBirdId(geoJSON.birdId)
     .withNumb(geoJSON.numb)
-    .withDateTaken(geoJSON.dateTaken)
+    .withDateTaken(new Date(geoJSON.dateTaken))
     .build();
   const { birdId, numb, descr, dateTaken, lat, lng } = geospatial;
   const stat =
-    `INSERT INTO geospatials (user_id, bird_id, numb, descr, date_taken, lat, lng)` +
+    `INSERT INTO geospatials (bird_id, numb, descr, date_taken, lat, lng)` +
     ` VALUES ('${birdId}', '${numb}', '${descr}', '${dateTaken}', '${lat}', '${lng}')`;
   const conn = await getConn();
   await conn.execute(stat);

@@ -2,25 +2,25 @@
  * Data access object for bird coordinates.
  */
 
+const { formatDate } = require("../util/util");
+
 class GeoJSONModel {
   constructor(geoJSONParams) {
-    const { lat, lng, birdId, numb, dateTaken } = geoJSONParams;
+    const { lat, lng, birdId, numb, dateTaken, descr } = geoJSONParams;
     this.lat = lat;
     this.lng = lng;
     this.birdId = birdId;
     this.numb = numb;
     this.dateTaken = dateTaken;
-    this.descr = geoJSONParams.descr;
+    this.descr = descr;
   }
   static get Builder() {
     class Builder {
       withLat(lat) {
-        if (lat < 0 || lat > 90) throw Error("Invalid latitude!");
         this.lat = lat;
         return this;
       }
       withLng(lng) {
-        if (lng < 0 || lng > 180) throw Error("Invalid longitude!");
         this.lng = lng;
         return this;
       }
@@ -37,7 +37,7 @@ class GeoJSONModel {
       withDateTaken(dateTaken) {
         if (dateTaken.getTime() > new Date().getTime())
           throw Error("Date must be in the past!");
-        this.dateTaken = this.formatDate(dateTaken);
+        this.dateTaken = formatDate(dateTaken);
         return this;
       }
       withDescr(descr) {

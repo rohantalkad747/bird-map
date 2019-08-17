@@ -31,7 +31,7 @@ class ContributeComponent extends React.Component {
       birdId: null,
       numb: 1,
       descr: "",
-      dateTaken: null
+      dateTaken: new Date()
     };
     this.addBird = this.addBird.bind(this);
     this.addQuantity = this.addQuantity.bind(this);
@@ -61,7 +61,7 @@ class ContributeComponent extends React.Component {
   }
 
   addBird(bird) {
-    this.setState({ bird: bird.id });
+    this.setState({ birdId: bird[0].id });
   }
 
   addDescription(e) {
@@ -69,7 +69,8 @@ class ContributeComponent extends React.Component {
   }
 
   addDate(date) {
-    this.setState({ date: date._d });
+    console.log(date._d.getTime())
+    this.setState({ dateTaken: new Date(date._d) });
   }
 
   addLocation(lat, lng) {
@@ -78,7 +79,8 @@ class ContributeComponent extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { birds, state, ...rest } = this.state;
+    const { birds, step, ...rest } = this.state;
+    console.log(rest)
     axios
       .post(`${serverName}/api/birds/add-coordinate`, {bird: rest})
       .then(res => console.log(res))
