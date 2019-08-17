@@ -8,11 +8,12 @@ import * as Images from './assets/logos';
 import Footer from "./components/footer/footer";
 import BirdContainer from "./components/maps/bird.container";
 import ContributeComponent from "./components/contribute/contribute";
+import { Layout } from "antd";
 
 class App extends React.Component {
   render() {
     return (
-        <div className="container app">
+        <div className="app container">
             <div style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                 <Navigation />
                     <Switch>

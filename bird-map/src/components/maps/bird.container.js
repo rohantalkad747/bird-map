@@ -4,6 +4,7 @@ import BirdMap from "./bird.map";
 import * as config from "../../config";
 import Search from "../search/search";
 import {getBirds} from "../../services/birds.service";
+import Typed from "react-typed";
 
 class BirdContainer extends React.Component {
   constructor(props) {
@@ -40,15 +41,20 @@ class BirdContainer extends React.Component {
           marginBottom: 50
         }}
       >
-        <h4 className="lead" style={{ marginLeft: "35%" }}>
-          {" "}
-          FIND YOUR FAVORITE BIRDS!{" "}
-        </h4>
+        <h1 style={{ marginLeft: "40%" }}>
+          <Typed
+              typedRef={typed => {
+                this.typed = typed;
+              }}
+              strings={["Observatory"]}
+              typeSpeed={65}
+          />
+        </h1>
         <div
           className="container"
-          style={{ width: "50%", marginTop: 25, marginBottom: 25 }}
+          style={{ width: "70%", marginTop: 25, marginBottom: 25 }}
         >
-          <Search options={this.state.birds} handleChange={this.changeBirds} />
+          <Search options={this.state.birds} multiple={true} handleChange={this.changeBirds} />
         </div>
         <BirdMap birds={this.state.selectedBirds} />
       </div>

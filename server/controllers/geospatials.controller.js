@@ -4,9 +4,9 @@ const geoService = require("../services/geospatials.service");
 
 router.post("/add-coordinate", (req, res, next) => {
   geoService
-    .createBirdCoordinate(req.body.birds)
+    .createBirdCoordinate(req.body.bird)
     .then(() => res.status(200).send("Successfully added bird coordinates"))
-    .catch(err => res.status(500).send("Failed to add coordinates"));
+    .catch(err => res.status(400).send(err.message));
 });
 
 router.post("/all-coordinates", (req, res, next) => {
@@ -17,7 +17,7 @@ router.post("/all-coordinates", (req, res, next) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).send("Failed to get birds");
+      res.status(400).send("Failed to get birds");
     });
 });
 
@@ -28,7 +28,7 @@ router.get("/all-birds", (req, res, next) => {
       res.send(birds);
     })
     .catch(err => {
-      res.status(500).send("Failed to get birds");
+      res.status(400).send("Failed to get birds");
     });
 });
 

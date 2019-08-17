@@ -3,6 +3,6 @@
     to{opacity:1;}
 }
 
-.app, .home, .birds, .login  {
+.app, .home, .birds, .login, .contribute  {
     animation: fadein 2s ease;
 }

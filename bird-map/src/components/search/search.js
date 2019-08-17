@@ -7,12 +7,11 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 class Search extends React.Component {
 
     render() {
-        console.log(this.props)
         return (
             <React.Fragment>
                 <Typeahead
                     labelKey="bird_name"
-                    multiple={true}
+                    multiple={this.props.multiple}
                     onChange = {this.props.handleChange}
                     options={this.props.options}
                     placeholder="Choose a bird ..."
