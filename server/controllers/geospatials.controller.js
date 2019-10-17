@@ -6,12 +6,12 @@ router.post("/add-coordinate", (req, res, next) => {
   geoService
     .createBirdCoordinate(req.body.bird)
     .then(() => res.status(200).send("Successfully added bird coordinates"))
-    .catch(err => res.status(400).send(err.message));
+    .catch(err => {res.status(400).send(err.message)});
 });
 
 router.post("/all-coordinates", (req, res, next) => {
   geoService
-    .getAllBirdCoordinates(req.body.birdIds)
+    .getAllBirdCoordinates(req.body.birdIds, req.body.dateRange)
     .then(birds => {
       res.send(birds);
     })

@@ -12,7 +12,7 @@ const formatDate = (date) => {
   const day = date.getDate();
   formattedDate.push(day < LAST_ONE_DIGIT_NUM ? `0${day}` : day);
   return formattedDate.join("-");
-}
+};
 
 /* Helper to parse MySQL raw data */
 const convertJSON = obj => JSON.parse(JSON.stringify(obj));

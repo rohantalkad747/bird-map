@@ -8,8 +8,8 @@ class BaseMap extends React.Component {
     super(props);
     this.setBaseLayers = this.setBaseLayers.bind(this);
     this.ico = L.icon({
-      iconUrl: "http://www.clker.com/cliparts/u/V/6/f/G/9/red-raven-hi.png",
-      iconSize: [24, 28]
+      iconUrl: "https://cdn0.iconfinder.com/data/icons/birds-colored/48/Animals_Birds_Artboard_14-512.png",
+      iconSize: [44, 52]
     });
   }
 

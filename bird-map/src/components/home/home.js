@@ -49,10 +49,9 @@ class Home extends React.Component {
                     <div className="col-sm-12">
                         <div className="jumbotron" style={{backgroundColor: '#1a1a1a', paddingTop: 150, paddingBottom: 150}}>
                             <h1 style={{color: 'white', textAlign: 'center', marginBottom: 30}}>Our Sponsors.</h1>
-                            <div style={{marginLeft: '20%', marginRight: '20%', marginBottom: 50}}>
+                            <div style={{marginLeft: '30%', marginRight: '30%', marginBottom: 50}}>
                                 <a href="http://www.natureconservancy.ca/en/"> <img className="partner logo" data-aos="fade-right" src={Images.canadaBird} alt={"Canada Bird Association"} /> </a>
                                 <a href="https://lassonde.yorku.ca/"><img className="partner logo" data-aos="fade-up" src={Images.lassonde} alt={"Canada Bird Association"} /></a>
-                                <a href="https://www.svca.on.ca/"><img className="partner logo" data-aos="fade-right" src={Images.Toronto} alt={"Canada Bird Association"} /></a>
                             </div>
                             <h1 style={{color: 'white', textAlign: 'center'}}> Help Support the BirdMap initiative.</h1>
                             <div className="container" data-aos="fade-up">

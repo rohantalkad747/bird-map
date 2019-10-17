@@ -22,27 +22,24 @@ const card = bird => {
 class BirdMap extends BaseMap {
   constructor(props) {
     super(props);
-    this.state = { birdIdentifiers: props.birds.map(b => b.id) };
-  }
-
-  setBirds() {
-    this.addBirdCoordinates();
+    this.state = { birdIdentifiers: props.birds.map(b => b.value), dateRange: props.dateRange };
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.state.birdIdentifiers !== nextProps.birdIdentifiers;
+    return this.state.birdIdentifiers !== nextProps.birdIdentifiers || this.state.dateRange != nextProps.dateRange;
   }
 
   componentWillReceiveProps(props) {
-    this.setState({ birdIdentifiers: props.birds.map(b => b.id) }, () => {
-      this.setBirds();
+    this.setState({ birdIdentifiers: props.birds.map(b => b.value), dateRange: props.dateRange }, () => {
+      this.addBirdCoordinates();
     });
   }
 
   addBirdCoordinates() {
     axios
       .post(config.serverName + "/api/birds/all-coordinates", {
-        birdIds: this.state.birdIdentifiers
+        birdIds: this.state.birdIdentifiers,
+        dateRange: this.state.dateRange
       })
       .then(res => {
         this.setState({
