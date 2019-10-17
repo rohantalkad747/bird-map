@@ -1,5 +1,5 @@
 import React from "react";
-import WhoMap from "./who.map";
+import WhoMap from "./whomap";
 import { getBirds } from "../../services/birds.service";
 import Select from "react-select";
 import axios from "axios";
