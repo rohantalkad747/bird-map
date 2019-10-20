@@ -7,7 +7,7 @@ import './home.css';
 const card = (img, title, txt) => {
     return (
     <div className="card" style={{width: '18rem'}}>
-        <img className="card-img-top logo" src={img} alt="Card image cap" />
+        <img className="card-img-top logo" style={{height: '45%'}} src={img} alt="Card image cap" />
             <div className="card-body">
                 <h5 className="card-title"> {title} </h5>
                 <p className="card-text">{txt}</p>
@@ -40,8 +40,8 @@ class Home extends React.Component {
                         <div className="card-deck" data-aos="zoom-in" style={{marginLeft: 20, marginRight: 20}}>
                             {card(Images.Chicakdee, "Maps", "Maps with your favorite species are plotted in real time, so you know where to go next time you bird!" +
                                 " Nesting locations and other migrational data are also shown, giving researchers a powerful tool for ornithology. ")}
-                            {card(Images.Chicakdee, "Graphs", " Graphs provide a clearer representation of the community collated data.")}
-                            {card(Images.Chicakdee, "Media", "This community platform is big on the sharing of our birding experiences. You can upload your photos, audio recordings, and videos of birds directly for your fellow birders!")}
+                            {card(Images.Graph, "Graphs", " Graphs provide a clearer representation of the community collated data.")}
+                            {card(Images.Toronto, "Media", "This community platform is big on the sharing of our birding experiences. You can upload your photos, audio recordings, and videos of birds directly for your fellow birders!")}
                         </div>
                     </div>
                 </div>

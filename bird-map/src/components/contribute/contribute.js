@@ -77,6 +77,7 @@ class ContributeComponent extends React.Component {
   }
 
   addLocation(lat, lng) {
+    console.log(lat, lng)
     this.setState({ lat: lat, lng: lng });
   }
 
