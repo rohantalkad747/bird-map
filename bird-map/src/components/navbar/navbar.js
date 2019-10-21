@@ -47,12 +47,6 @@ class Navigation extends React.Component {
                   Home <span className="sr-only">(current)</span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="about">
-                  {" "}
-                  About{" "}
-                </Link>
-              </li>
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -75,7 +69,12 @@ class Navigation extends React.Component {
                 </div>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="about">
+                <Link className="nav-link" to="/graph">
+                  Graphs
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/donate">
                   Donate
                 </Link>
               </li>

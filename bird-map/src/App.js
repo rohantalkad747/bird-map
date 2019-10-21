@@ -8,6 +8,7 @@ import * as Images from './assets/logos';
 import Footer from "./components/footer/footer";
 import BirdContainer from "./components/maps/bird.container";
 import ContributeComponent from "./components/contribute/contribute";
+import Graph from "./components/graph/graph";
 import { Layout } from "antd";
 
 class App extends React.Component {
@@ -21,6 +22,7 @@ class App extends React.Component {
                         <Route path="/birdmap" component={BirdContainer}/>
                         <Route path="/account" component={AccountContainer}/>
                         <Route path="/contribute" component={ContributeComponent}/>
+                        <Route path="/graph" component={Graph} />
                     </Switch>
                 <Footer />
             </div>

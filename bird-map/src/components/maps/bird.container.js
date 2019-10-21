@@ -84,7 +84,7 @@ class BirdContainer extends React.Component {
           marginBottom: 50
         }}
       >
-        <div style={{ marginBottom: "5%" }}>
+        <div style={{ marginBottom: this.state.prevFailure ? '5%' : 0 }}>
           {this.state.prevFailure ? this.state.alertComp.component : null}
         </div>
         <h1 style={{ marginLeft: "40%" }}>

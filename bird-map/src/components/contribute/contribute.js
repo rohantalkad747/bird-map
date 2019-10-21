@@ -61,7 +61,7 @@ class ContributeComponent extends React.Component {
   }
 
   addQuantity(quant) {
-    this.setState({ quantity: Math.floor(quant) });
+    this.setState({ numb: Math.floor(quant) });
   }
 
   addBird(bird) {

@@ -42,6 +42,7 @@ class BirdMap extends BaseMap {
         dateRange: this.state.dateRange
       })
       .then(res => {
+        console.log(res.data);
         this.setState({
           birdIdentifiers: this.state.birdIdentifiers,
           birdCoordinates: res.data

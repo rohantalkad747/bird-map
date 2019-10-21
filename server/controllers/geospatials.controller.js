@@ -21,6 +21,12 @@ router.post("/all-coordinates", (req, res, next) => {
     });
 });
 
+router.post("/graph-birds", (req, res, next) => {
+  geoService.getNumberOfBirds(req.body.birdId, req.body.options)
+    .then((birds) => res.send(birds))
+    .catch((e) => res.status(400).send(e.message));
+})
+
 router.get("/all-birds", (req, res, next) => {
   geoService
     .getAllBirds()

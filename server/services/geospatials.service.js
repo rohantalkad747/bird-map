@@ -113,49 +113,57 @@ async function getAllBirds() {
 }
 
 async function getBirdsWithDateConstraint(birdId, options) {
-  const conn = getConn();
-  const stat = `SELECT * FROM geospatials WHERE bird_id = ${birdId}` + options.MONTHLY ? yearConstraint : "";
-  const rawBirds = await conn.execute(stat[0]);
+  const conn = await getConn();
+  const { MONTHLY } = options;
+  var stat = `SELECT * FROM geospatials WHERE bird_id=${birdId}` + (MONTHLY ? getYearConstraint(options.MONTHLY) : ""); 
+  console.log(stat);
+  const rawBirds = await conn.execute(stat);
+  await conn.end();
+  return convertJSON(rawBirds[0]);
 }
 
 /**
  * Returns the number of birds as per the optional constraints.
- * @param birdIds
+ * @param birdId
  * @param dateRange (MONTHLY -> year, YEARLY), region(coords, radius)
  * @return {Promise<void>}
  */
-async function getNumberOfBirds(birdIds, options) {
+async function getNumberOfBirds(birdId, options) {
   const birdsToQuantity = {};
-  for (const birdId of birdIds) {
-    const birds  = getBirdsWithDateConstraint(birdId, options);
+  const birds  = await getBirdsWithDateConstraint(birdId, options);
+  console.log(birds);
     for (const bird of birds) {
       if (calculateDistance(options.origin, { lat: bird.lat, lng: bird.lng }) < options.radius) {
         if (options.MONTHLY) {
-          const month = bird.date_taken.getMonth();
-          if (birdsToQuantity[month] == null) {
-            birdsToQuantity[month] = 1;
-          } else {
-            birdsToQuantity[month]++;
-          }
+          const month = new Date(bird.date_taken).getMonth() + 1;
+          birdsToQuantity[month] = (birdsToQuantity[month] || 0) + bird.numb;
         } else {
+          const year = new Date(bird.date_taken).getUTCFullYear();
+          birdsToQuantity[year] = (birdsToQuantity[year] || 0) + bird.numb;
         }
       }
     }
-  }
+  return birdsToQuantity;
 }
 
-function getYearConstraint(dateRange) {
-  const { year } = dateRange;
-  return `AND date_taken BETWEEN '01/01/${year}' AND '01/01/${year + 1}'`;
-}
+(async () => {
+  console.log(await getNumberOfBirds(2, { MONTHLY: 2019, origin: { lat: 43.6478275796959,
+    lng: -79.34345483779909 }, radius: 5000 }));
+})();
 
-function getBirds() {}
+function getYearConstraint(year) {
+  return ` AND date_taken BETWEEN '${year}-01-01' AND '${parseInt(year) + 1}-01-01'`;
+}
 
 /**
  * Returns the distance in meters between two coordinates.
  * @return {number}
  */
 function calculateDistance(cordOne, cordTwo) {
+  if (typeof(Number.prototype.toRadians) === "undefined") {
+    Number.prototype.toRadians = function() {
+      return this * Math.PI / 180;
+} }
   const latOne = cordOne.lat.toRadians();
   const latTwo = cordTwo.lat.toRadians();
   const diffLat = (cordTwo.lat - cordOne.lat).toRadians();
@@ -171,5 +179,6 @@ function calculateDistance(cordOne, cordTwo) {
 module.exports = {
   getAllBirds,
   getAllBirdCoordinates,
-  createBirdCoordinate
+  createBirdCoordinate,
+  getNumberOfBirds
 };
